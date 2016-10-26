@@ -21,7 +21,7 @@ class BoardManager(object):
 
             for board in data['boards']:
                 logger.debug("Loading board %d", board['order'])
-                b = Board(board['order'])
+                b = Board(board['order'], board['name'])
                 if board['order'] in self.boards:
                     raise Exception("Can't have multiple boards with the same order")
 
@@ -52,10 +52,11 @@ class BoardManager(object):
 class Board(object):
     nextid = 1
 
-    def __init__(self, id):
+    def __init__(self, id, name):
         self.categories = []
         self.teams = []
         self.id = id
+        self.name = name
 
     def add_category(self, name):
         ct = Category(self.nextid, name)
@@ -74,6 +75,7 @@ class Board(object):
     def as_dict(self):
         return {
             'id': self.id,
+            'name': self.name,
             'teams': [team.as_dict() for team in self.teams],
             'categories': [cat.as_dict() for cat in self.categories],
         }

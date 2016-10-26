@@ -1,6 +1,7 @@
 ---
 boards:
   - order: 1
+    name: First Round
     categories:
       - name: Numbers that Count
         questions:
