@@ -28,3 +28,16 @@ def home():
 def on_board_current():
     cur_board = bm.current
     emit('board.current', cur_board.as_dict())
+
+
+@socketio.on('question.open')
+def on_question_open(data):
+    cat_id = int(data['category'])
+    question_id = int(data['id'])
+
+    print("Opening question {}-{}".format(cat_id, question_id))
+
+    cat = bm.current.get_category(cat_id)
+    question = cat.get_question(question_id)
+
+    emit('question.open', question.as_dict(), broadcast=True)

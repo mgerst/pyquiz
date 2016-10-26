@@ -8,6 +8,100 @@ from flask_socketio import send, emit
 logger = logging.getLogger(__name__)
 
 
+class Question(object):
+    def __init__(self, id, value, question, answer, daily_double=False):
+        self.id = id
+        self.value = value
+        self.question = question
+        self.answer = answer
+        self.daily_double = daily_double
+        self.visible = True
+        self.category = None
+
+    def mark_answered(self):
+        emit('close-item', {'id': self.id, 'category': self.category.id})
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'value': self.value,
+            'question': self.question,
+            'answer': self.answer,
+            'daily_double': self.daily_double,
+            'visible': self.visible,
+            'category': self.category.id,
+        }
+
+
+class Category(object):
+    nextid = 1
+
+    def __init__(self, id, name):
+        self.id = id
+        self.items = []
+        self.name = name
+        self.board = None
+
+    def add_question(self, value, question, answer, dd=False):
+        bl = Question(self.nextid, value, question, answer, dd)
+        bl.category = self
+
+        self.items.append(bl)
+        self.nextid += 1
+
+        return bl
+
+    def load_questions(self, questions):
+        for question in questions:
+            bl = self.add_question(question['value'], question['clue'], question['answer'], question['daily_double'])
+
+    def get_question(self, id : int) -> Question:
+        print(self.items)
+        return self.items[id - 1]
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'questions': [ques.as_dict() for ques in self.items],
+        }
+
+
+class Board(object):
+    nextid = 1
+
+    def __init__(self, id, name):
+        self.categories = []
+        self.teams = []
+        self.id = id
+        self.name = name
+
+    def add_category(self, name):
+        ct = Category(self.nextid, name)
+        ct.board = self
+
+        self.categories.append(ct)
+        self.nextid += 1
+
+        return ct
+
+    def load_categories(self, categories):
+        for category in categories:
+            ct = self.add_category(category['name'])
+            ct.load_questions(category['questions'])
+
+    def get_category(self, id : int) -> Category:
+        return self.categories[id - 1]
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'teams': [team.as_dict() for team in self.teams],
+            'categories': [cat.as_dict() for cat in self.categories],
+        }
+
+
 class BoardManager(object):
     def __init__(self):
         self.boards = OrderedDict()
@@ -40,99 +134,13 @@ class BoardManager(object):
             emit('game.end')
 
     @property
-    def current(self):
+    def current(self) -> Board:
         if not self.current_board:
             self.next_board()
 
         if self.current_board not in self.boards:
             raise RuntimeWarning("Current board {} not in boards".format(self.current_board))
         return self.boards[self.current_board]
-
-
-class Board(object):
-    nextid = 1
-
-    def __init__(self, id, name):
-        self.categories = []
-        self.teams = []
-        self.id = id
-        self.name = name
-
-    def add_category(self, name):
-        ct = Category(self.nextid, name)
-        ct.board = self
-
-        self.categories.append(ct)
-        self.nextid += 1
-
-        return ct
-
-    def load_categories(self, categories):
-        for category in categories:
-            ct = self.add_category(category['name'])
-            ct.load_questions(category['questions'])
-
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'teams': [team.as_dict() for team in self.teams],
-            'categories': [cat.as_dict() for cat in self.categories],
-        }
-
-
-class Category(object):
-    nextid = 1
-
-    def __init__(self, id, name):
-        self.id = id
-        self.items = []
-        self.name = name
-        self.board = None
-
-    def add_question(self, value, question, answer, dd=False):
-        bl = Question(self.nextid, value, question, answer, dd)
-        bl.category = self
-
-        self.items.append(bl)
-        self.nextid += 1
-
-        return bl
-
-    def load_questions(self, questions):
-        for question in questions:
-            bl = self.add_question(question['value'], question['clue'], question['answer'], question['daily_double'])
-
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'questions': [ques.as_dict() for ques in self.items],
-        }
-
-
-class Question(object):
-    def __init__(self, id, value, question, answer, daily_double=False):
-        self.id = id
-        self.value = value
-        self.question = question
-        self.answer = answer
-        self.daily_double = daily_double
-        self.visible = True
-        self.category = None
-
-    def mark_answered(self):
-        emit('close-item', {'id': self.id, 'category': self.category.id})
-
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'value': self.value,
-            'question': self.question,
-            'answer': self.answer,
-            'daily_double': self.daily_double,
-            'visible': self.visible,
-        }
 
 
 class Team(object):

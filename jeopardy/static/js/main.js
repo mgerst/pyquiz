@@ -8,6 +8,10 @@ socket.on('board.current', function(data) {
     drawBoard(data);
 });
 
+socket.on('question.open', function(data) {
+    console.log(data);
+});
+
 function drawBoard(data) {
     let name = document.querySelector("#board-name");
     let categories = document.querySelector("#category-headers");
@@ -23,7 +27,7 @@ function drawBoard(data) {
 
     for (let id in data.categories) {
         let category = data.categories[id];
-        cat_template += `<th>${category.name}</th>`
+        cat_template += `<th class="cat" data-id="${category.id}">${category.name}</th>`
 
         quests.push(category.questions);
     }
@@ -42,7 +46,7 @@ function drawBoard(data) {
             if (c in quests && i in quests[c]) {
                 let question = quests[c][i];
 
-                row_template += `<td>${question.value}</td>`;
+                row_template += `<td class="question" data-category="${question.category}" data-id="${question.id}">${question.value}</td>`;
             }
         }
 
@@ -53,4 +57,15 @@ function drawBoard(data) {
     categories.innerHTML = cat_template;
     questions.innerHTML = question_template;
     console.log(quests);
+    setupClickListeners();
+}
+
+function setupClickListeners() {
+    let map = Array.prototype.map;
+    let els = document.querySelectorAll(".question");
+    map.call(els, function(el) {
+        el.addEventListener("click", function(evt) {
+            socket.emit('question.open', {category: this.dataset.category, id: this.dataset.id});
+        });
+    });
 }
