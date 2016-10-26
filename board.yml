@@ -1,0 +1,49 @@
+---
+boards:
+  - order: 1
+    categories:
+      - name: Numbers that Count
+        questions:
+          - clue: The frequency in Hz emitted by the Cap'n Crunch Bosun whistle.
+            answer: 2600
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: The number of the ISO standard for standardized representation of dates and times (YYYY-MM-DDTHH:MM:SS)
+            answer: 8601
+            value: 200
+            daily_double: no
+            type: text
+
+          - clue: The Ehtertype of IPv4 (hex)
+            answer: 0x0800
+            value: 300
+            daily_double: yes
+            type: text
+
+          - clue: The maximum block size, in bits, for AES
+            answer: Block size is always 128 bits (Keys are 128, 192, 256)
+            value: 400
+            daily_double: no
+            type: text
+
+          - clue: The maximum positive value that can be represented by a signed 32-bit 2-s complement integer, in decimal
+            answer: 2^21 - 1 = 2,147,483,647
+            value: 500
+            daily_double: no
+            type: text
+
+      - name: Vulns
+        questions:
+          - clue: "Consistently ranking #1 on the OWASP Top 10, SQL is a very common flavor of this vuln."
+            answer: "Injection (\"SQL Injection = FAIL\")"
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
+            answer: Cross-Site Scripting (XSS)
+            value: 200
+            daily_double: no
+            type: text

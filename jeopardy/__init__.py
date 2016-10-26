@@ -8,7 +8,8 @@ from jeopardy.controllers.main import main
 
 from jeopardy.extensions import (
     assets_env,
-    debug_toolbar
+    debug_toolbar,
+    socketio
 )
 
 
@@ -34,6 +35,8 @@ def create_app(object_name):
     assets_loader = PythonAssetsLoader(assets)
     for name, bundle in assets_loader.load_bundles().items():
         assets_env.register(name, bundle)
+
+    socketio.init_app(app)
 
     # register out blueprints
     app.register_blueprint(main)

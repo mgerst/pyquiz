@@ -7,6 +7,7 @@ common_css = Bundle(
 )
 
 common_js = Bundle(
+    'js/socket.io.min.js',
     Bundle(
         'js/main.js',
         filters='jsmin'
