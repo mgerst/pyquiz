@@ -11,6 +11,7 @@ from jeopardy.extensions import (
     debug_toolbar,
     socketio
 )
+from jeopardy.models import BoardManager
 
 
 def create_app(object_name):
@@ -26,6 +27,9 @@ def create_app(object_name):
     app = Flask(__name__)
 
     app.config.from_object(object_name)
+
+    bm = BoardManager()
+    app.config['BOARD_MANAGER'] = bm
 
     # initialize the debug tool bar
     debug_toolbar.init_app(app)

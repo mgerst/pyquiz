@@ -21,9 +21,9 @@ manager.add_command("clean", Clean())
 
 @manager.option('-b', '--boards', dest='boards', default='board.yml')
 def run_server(boards):
-    bm = BoardManager()
+    bm = app.config.get('BOARD_MANAGER')
     bm.load_board(boards)
-    app.config['BOARD_MANAGER'] = bm
+    bm.init_boards()
 
     from jeopardy.extensions import socketio
     socketio.run(app)
