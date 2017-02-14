@@ -1,5 +1,5 @@
-Py Jeopardy
-===========
+Py Quiz
+=======
 A python implementation of Jeopardy.
 
 Installation
