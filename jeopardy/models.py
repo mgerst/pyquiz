@@ -106,6 +106,7 @@ class BoardManager(object):
         self.boards = OrderedDict()
         self.board_iter = None
         self.current_board = None
+        self.current_question = None  # type: Question
         self.teams = {}
 
     def claim_team(self, name, id, key):
