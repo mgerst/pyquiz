@@ -48,3 +48,21 @@ boards:
             value: 200
             daily_double: no
             type: text
+
+          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
+            answer: Cross-Site Scripting (XSS)
+            value: 300
+            daily_double: no
+            type: text
+
+          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
+            answer: Cross-Site Scripting (XSS)
+            value: 400
+            daily_double: no
+            type: text
+
+          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
+            answer: Cross-Site Scripting (XSS)
+            value: 500
+            daily_double: no
+            type: text

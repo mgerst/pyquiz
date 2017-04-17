@@ -9,7 +9,32 @@ socket.on('board.current', function(data) {
 });
 
 socket.on('question.open', function(data) {
-    console.log(data);
+    var prompt = {}
+    //game.current_points = points
+    var questionID = data.id;
+    game.current_questionID = questionID;
+    console.log(data.question);
+    $('#game').hide()
+    $('#question, #answer, #prompt').css({"display": "block"});
+    $('#question').html(data.answer);
+    if (data.answer != null)
+        $('#answer').html(data.question);
+    var font_size = 24;
+    /*
+    do {
+        $('#question, #answer').css({"font-size": font_size});
+        font_size++;
+    } while (!getScrollBarState().vScrollbar && font_size < 72)
+    */
+    $('#question, #answer').css({"font-size": Math.max(24, font_size - 2)});
+    $('#question, #answer, #prompt').css({"visibility": "visible"});
+    $('#question, #prompt').hide();
+
+    $('#prompt').fadeIn(1000)
+    if ($('#question').html().length == 0)
+        $('#correct-response').hide()
+    else
+        $('#correct-response').show();
 });
 
 function drawBoard(data) {

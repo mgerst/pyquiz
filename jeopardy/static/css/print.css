@@ -1,0 +1,24 @@
+.print-hide {
+	display:none;
+}
+
+#stats {
+	display:none;
+	visibility:hidden;
+}
+
+#options {
+	display:none;
+}
+
+#prompt {
+	display:none;
+}
+
+
+
+#game tbody td, #game thead th {
+        vertical-align: top;
+
+}
+

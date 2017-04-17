@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1 id="board-name">Home Page</h1>
+    <h1 id="board-name" style="color: white">Home Page</h1>
 
-    <table id="game-board">
-    <thead id="category-headers">
-    </thead>
-    <tbody id="questions">
-    </tbody>
+    <table id="game">
+        <thead id="category-headers">
+        </thead>
+        <tbody id="questions">
+        </tbody>
     </table>
+    <div id="prompt">
+        <h1 id="answer"></h1>
+        <p><span id="correct-response"><a href="javascript:$('#question').show()">Correct Response</a> &nbsp;&nbsp;&nbsp;&nbsp; </span><a href="javascript:void(0)">Continue</a></p>
+        <h1 id="question"></h1>
+    </div>
 {% endblock %}
