@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <form method="POST">
+        <label for="name">Team Name:</label>
+        <input type="text" name="name" id="name" /><br /><br />
+        <label for="key">Key:</label>
+        <input type="text" name="key" id="key"><br /><br />
+        <button type="submit">Join</button>
+    </form>
+{% endblock %}

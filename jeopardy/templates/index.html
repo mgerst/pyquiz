@@ -1,12 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block body %}
-    <h1 id="board-name">Home Page</h1>
-
-    <table id="game-board">
-    <thead id="category-headers">
-    </thead>
-    <tbody id="questions">
-    </tbody>
-    </table>
+    <div style="text-align: center">
+        <h1>Choose a team:</h1>
+        {% for id, name in teams.items() %}
+            <a class="player-choice" href="/play/{{ id }}" data-id="{{ id }}">
+                <div class="player-select">
+                    {% if name %}
+                        <h1>{{ name }}</h1>
+                    {% else %}
+                        <h1>{{ id }}</h1>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}

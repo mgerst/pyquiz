@@ -4,6 +4,7 @@ import logging
 import yaml
 from flask_socketio import send, emit
 
+from jeopardy.extensions import socketio
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,6 @@ class Board(object):
 
     def __init__(self, id, name):
         self.categories = []
-        self.teams = []
         self.id = id
         self.name = name
 
@@ -97,7 +97,6 @@ class Board(object):
         return {
             'id': self.id,
             'name': self.name,
-            'teams': [team.as_dict() for team in self.teams],
             'categories': [cat.as_dict() for cat in self.categories],
         }
 
@@ -107,6 +106,20 @@ class BoardManager(object):
         self.boards = OrderedDict()
         self.board_iter = None
         self.current_board = None
+        self.teams = {}
+
+    def claim_team(self, name, id, key):
+        self.teams[id] = Team(id, name, key)
+        socketio.emit('team.taken', {'id': id, 'name': name})
+
+    def team_exists(self, id):
+        return id in self.teams
+
+    def validate_team(self, id, key):
+        if id in self.teams:
+            if self.teams[id].key == key:
+                return True
+        return False
 
     def load_board(self, filename):
         with open(filename, 'r') as fp:
@@ -144,9 +157,10 @@ class BoardManager(object):
 
 
 class Team(object):
-    def __init__(self, id, name):
+    def __init__(self, id, name, key):
         self.id = id
         self.name = name
+        self.key = key
         self.score = 0
 
     def as_dict(self):
