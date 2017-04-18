@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
 {% block body %}
+    {% if admin %}
+        <form method="POST" action="/admin">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password"/><br/><br/>
+        <button type="submit">Log In</button>
+    {% else %}
     <form method="POST">
         <label for="name">Team Name:</label>
         <input type="text" name="name" id="name" /><br /><br />
         <label for="key">Key:</label>
         <input type="text" name="key" id="key"><br /><br />
         <button type="submit">Join</button>
+    {% endif %}
     </form>
 {% endblock %}

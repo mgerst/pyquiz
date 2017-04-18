@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for, session
+import time
+
+from flask import Blueprint, render_template, request, redirect, session
 from flask_socketio import emit
 
 from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager
 from jeopardy.utils import team_required, login_required, admin_required
-
-import time
 
 bm = None  # type: BoardManager
 
@@ -62,6 +62,16 @@ def claim_team(team):
         return redirect('/play/{}'.format(team))
 
 
+@main.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'GET':
+        return render_template('login.html', admin=True)
+    if 'password' in request.form and bm.validate_admin(request.form['password']):
+        session['admin'] = True
+        session['logged_in'] = True
+    return redirect('/board')
+
+
 @socketio.on('whoami')
 def whoami():
     emit('whoami', {
@@ -90,6 +100,17 @@ def on_question_open(data):
     bm.current_question = question
 
     emit('question.open', question.as_dict(), broadcast=True)
+
+
+@socketio.on('correct.answer')
+@admin_required
+def show_correct_answer(data):
+    question = bm.current_question
+
+    ret_data = {
+        'answer': question.answer
+    }
+    emit('correct.answer', ret_data, broadcast=True)
 
 
 @socketio.on('question.close')

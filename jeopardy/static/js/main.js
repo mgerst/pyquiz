@@ -8,13 +8,19 @@ socket.on('board.current', function(data) {
     drawBoard(data);
 });
 
+socket.on('correct.answer', function (data) {
+    console.log("Showing " + data.answer);
+    $('#question').html(data.answer);
+    $('#question').show();
+});
+
 socket.on('question.open', function(data) {
-    var prompt = {}
+    var prompt = {};
     //game.current_points = points
     var questionID = data.id;
     game.current_questionID = questionID;
     console.log(data.question);
-    $('#game').hide()
+    $('#game').hide();
     $('#question, #answer, #prompt').css({"display": "block"});
     $('#question').html(data.answer);
     if (data.answer != null)
@@ -30,12 +36,17 @@ socket.on('question.open', function(data) {
     $('#question, #answer, #prompt').css({"visibility": "visible"});
     $('#question, #prompt').hide();
 
-    $('#prompt').fadeIn(1000)
+    $('#prompt').fadeIn(1000);
     if ($('#question').html().length == 0)
-        $('#correct-response').hide()
+        $('#correct-response').hide();
     else
         $('#correct-response').show();
 });
+
+function showAnswer() {
+    $('#question').show();
+    socket.emit('correct.answer', {});
+}
 
 function drawBoard(data) {
     let name = document.querySelector("#board-name");
@@ -52,7 +63,7 @@ function drawBoard(data) {
 
     for (let id in data.categories) {
         let category = data.categories[id];
-        cat_template += `<th class="cat" data-id="${category.id}">${category.name}</th>`
+        cat_template += `<th class="cat" data-id="${category.id}">${category.name}</th>`;
 
         quests.push(category.questions);
     }

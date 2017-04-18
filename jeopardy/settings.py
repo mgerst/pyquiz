@@ -1,5 +1,6 @@
 class Config(object):
     SECRET_KEY = 'REPLACE_ME'
+    ADMIN_PW = 'REPLACE_ME'
 
 
 class ProdConfig(Config):

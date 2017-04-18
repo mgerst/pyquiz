@@ -1,8 +1,9 @@
-from collections import OrderedDict
 import logging
+import sys
+from collections import OrderedDict
 
 import yaml
-from flask_socketio import send, emit
+from flask_socketio import emit
 
 from jeopardy.extensions import socketio
 
@@ -108,6 +109,7 @@ class BoardManager(object):
         self.current_board = None
         self.current_question = None  # type: Question
         self.teams = {}
+        self.admin_pw = ""
 
     def claim_team(self, name, id, key):
         self.teams[id] = Team(id, name, key)
@@ -122,10 +124,18 @@ class BoardManager(object):
                 return True
         return False
 
+    def validate_admin(self, password):
+        return password == self.admin_pw
+
     def load_board(self, filename):
         with open(filename, 'r') as fp:
             logger.info("Loading Jeopardy")
             data = yaml.load(fp)
+            try:
+                self.admin_pw = data['password']
+            except KeyError:
+                print("Need to set `password` in board.yml.")
+                sys.exit()
 
             for board in data['boards']:
                 logger.debug("Loading board %d", board['order'])

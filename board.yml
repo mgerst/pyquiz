@@ -66,3 +66,5 @@ boards:
             value: 500
             daily_double: no
             type: text
+
+password: cdc
