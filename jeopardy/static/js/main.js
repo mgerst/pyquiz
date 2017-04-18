@@ -108,7 +108,6 @@ socket.on('buzzer.opened', function () {
 });
 
 socket.on('question.close', function (data) {
-    console.log(data);
     if (data.remove) {
         $('#' + data.question.category + '_' + data.question.id).html("");
         var old = document.getElementById(data.question.category + '_' + data.question.id);
@@ -140,6 +139,10 @@ socket.on('buzzer.closed', data => {
 
 $('#continue').click(function () {
     socket.emit('question.close', {remove: true});
+});
+
+$('#back').click(function () {
+    socket.emit('question.close', {remove: false});
 });
 
 $('#correct-response').click(function () {

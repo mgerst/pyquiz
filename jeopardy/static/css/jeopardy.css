@@ -242,6 +242,7 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 32px;
+    background-color: cornflowerblue;
 }
 
 #buzzer, #reopen {
@@ -250,10 +251,6 @@ button {
 
 #correct-response {
     background-color: green;
-}
-
-#continue {
-    background-color: cornflowerblue;
 }
 
 #stats {

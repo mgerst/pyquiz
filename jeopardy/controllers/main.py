@@ -148,7 +148,8 @@ def show_correct_answer():
 def on_question_close(data):
     remove = data['remove']
     question = bm.current_question
-    question.visible = False
+    if remove:
+        question.visible = False
     bm.current_question = None
 
     ret_data = {
