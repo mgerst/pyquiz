@@ -99,12 +99,13 @@ def on_question_open(data):
     question = cat.get_question(question_id)
     bm.current_question = question
 
-    ret = question.as_dict()
+    ret = question.as_dict(True)
     ret['daily_double'] = question.daily_double
     ret['question'] = question.question
     question.visible = True
+    print(ret)
 
-    emit('question.open', question.as_dict(), broadcast=True)
+    emit('question.open', ret, broadcast=True)
 
 
 @socketio.on('correct.answer')
@@ -115,6 +116,7 @@ def show_correct_answer(data):
     ret_data = {
         'answer': question.answer
     }
+    print("ajslkdfjl")
     emit('correct.answer', ret_data, broadcast=True)
 
 

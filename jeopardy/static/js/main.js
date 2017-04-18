@@ -16,15 +16,11 @@ socket.on('correct.answer', function (data) {
 
 socket.on('question.open', function(data) {
     var prompt = {};
-    //game.current_points = points
-    var questionID = data.id;
-    game.current_questionID = questionID;
-    console.log(data.question);
+    console.log(data);
     $('#game').hide();
     $('#question, #answer, #prompt').css({"display": "block"});
     $('#question').html(data.answer);
-    if (data.answer != null)
-        $('#answer').html(data.question);
+    $('#answer').html(data.question);
     var font_size = 24;
     /*
     do {
@@ -37,9 +33,7 @@ socket.on('question.open', function(data) {
     $('#question, #prompt').hide();
 
     $('#prompt').fadeIn(1000);
-    if ($('#question').html().length == 0)
-        $('#correct-response').hide();
-    else
+    if ($('#correct-response').html() != null)
         $('#correct-response').show();
 });
 

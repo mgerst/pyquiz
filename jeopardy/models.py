@@ -24,7 +24,7 @@ class Question(object):
     def mark_answered(self):
         emit('close-item', {'id': self.id, 'category': self.category.id})
 
-    def as_dict(self):
+    def as_dict(self, sanitized=False):
         ret = {
             'id': self.id,
             'value': self.value,
@@ -32,12 +32,13 @@ class Question(object):
         }
 
         if session.get('admin', False):
-            ret.update({
-                'question': self.question,
-                'answer': self.answer,
-                'daily_double': self.daily_double,
-                'visible': self.visible,
-            })
+            if not sanitized:
+                ret.update({
+                    'question': self.question,
+                    'answer': self.answer,
+                    'daily_double': self.daily_double,
+                    'visible': self.visible,
+                })
 
         return ret
 
