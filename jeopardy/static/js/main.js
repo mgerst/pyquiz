@@ -32,15 +32,11 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-socket.on('question.open', async function (data) {
+socket.on('question.open', function (data) {
     current_question = data;
     var prompt = {};
     console.log(data);
     $('#game').hide();
-    if (data.daily_double) {
-        $('#dailydouble').show();
-        await sleep(5000);
-    }
     $('#question, #answer, #prompt').css({"display": "block"});
     $('#question').html(data.answer);
     $('#answer').html(data.question);
@@ -53,6 +49,37 @@ socket.on('question.open', async function (data) {
     if ($('#correct-response') != null)
         $('#correct-response').show();
     $('#buzzer-div').show();
+});
+
+socket.on('double.open', data => {
+    current_question = data;
+
+    $("#game").hide();
+    $("#dailydouble").show();
+
+    if (iam.admin) {
+        $("#dailyadmin").show();
+
+        $("#dailysubmit").on("click", e => {
+            let team = $("#team_number").val();
+            let wager = $("#wager").val();
+
+            socket.emit('double.wager', {team: team, wager: wager});
+
+            $("#dailyadmin").hide();
+        });
+    }
+});
+
+socket.on('double.start', data => {
+    highlightTeam(data.team);
+    current_question.question = data.question;
+    $("#answer").html(data.question);
+    $("#answer").css({"display": "block", "visibility": "visible"});
+
+    $("#prompt").fadeIn(1000);
+    if ($("#correct-response") != null)
+        $("#correct-response").show();
 });
 
 socket.on('team.taken', data => {
@@ -77,6 +104,7 @@ socket.on('buzzer.opened', function () {
     $('#buzzer').click(buzzer);
     $('#buzzer').css('background-color', '#4caf50');
     $('#team_buzzed').html("");
+    $(".team").removeClass("buzzedin");
 });
 
 socket.on('question.close', function (data) {
@@ -90,6 +118,8 @@ socket.on('question.close', function (data) {
     $('#question, #answer, #prompt').css({"visibility": "hidden"});
     $('#question, #answer, #prompt').css({"display": "none"});
     $('#game').show();
+    $('.team').removeClass('buzzedin');
+    $("#dailydouble").hide();
 
     current_question = null;
 });
@@ -101,6 +131,11 @@ socket.on('buzzer.clicked', function (data) {
     $('#buzzer-div').show();
     $('#team_buzzed').html("Team " + data.team + " buzzed in!");
     $('#reopen').show();
+    highlightTeam(data.team);
+});
+
+socket.on('buzzer.closed', data => {
+    $(`.team`).removeClass('buzzedin');
 });
 
 $('#continue').click(function () {
@@ -114,6 +149,7 @@ $('#correct-response').click(function () {
 });
 
 function buzzer() {
+    if (iam.admin) return;
     socket.emit('buzzer.clicked');
     $('#buzzer').css('background-color', 'red');
 }
@@ -122,6 +158,13 @@ $('#buzzer').click(buzzer);
 $('body').keypress(buzzer);
 
 $('#reopen').click(function () {
+    console.debug(current_question);
+    if (current_question.daily_double) {
+        console.log("Reopened daily double");
+        socket.emit('question.close', {remove: false});
+        socket.emit('question.open', {id: current_question.id, category: current_question.category, reopen: true});
+        return;
+    }
     socket.emit('buzzer.open');
 });
 
@@ -211,4 +254,14 @@ function setupTeamAwards() {
         el.addEventListener("click", teamAward);
         el.addEventListener("contextmenu", teamDeduct);
     });
+}
+
+function dailyDouble() {
+    if (iam.admin) {
+        $("#dailyadmin").show();
+    }
+}
+
+function highlightTeam(team) {
+    $(`.team[data-id="${team}"]`).addClass('buzzedin');
 }

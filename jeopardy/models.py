@@ -21,6 +21,10 @@ class Question(object):
         self.visible = True
         self.category = None
 
+        # Daily Double Stuff
+        self.double_team = None
+        self.wager = None
+
     def mark_answered(self):
         emit('close-item', {'id': self.id, 'category': self.category.id})
 

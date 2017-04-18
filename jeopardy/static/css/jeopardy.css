@@ -269,6 +269,11 @@ button {
 
 #stats .team {
     flex-grow: 1;
+    margin: 10px;
+}
+
+.buzzedin {
+    border: 1px solid green;
 }
 
 .team h5, .team span {

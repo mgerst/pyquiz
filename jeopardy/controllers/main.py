@@ -108,9 +108,28 @@ def on_question_open(data):
     ret = question.as_dict(True)
     ret['daily_double'] = question.daily_double
     ret['question'] = question.question
+    ret['category'] = question.category.id
     question.visible = True
 
-    emit('question.open', ret, broadcast=True)
+    if 'reopen' in data and data['reopen']:
+        question.daily_double = False
+        ret['daily_double'] = False
+
+    if question.daily_double:
+        del ret['question']
+        emit('double.open', ret, broadcast=True)
+    else:
+        emit('question.open', ret, broadcast=True)
+
+
+@socketio.on('double.wager')
+@admin_required
+def on_double(data):
+    question = bm.current_question
+    question.double_team = data['team']
+    question.wager = int(data['wager'])
+
+    emit('double.start', {'team': data['team'], 'question': question.question}, broadcast=True)
 
 
 @socketio.on('correct.answer')
@@ -169,7 +188,15 @@ def team_award(data):
 
     team = bm.teams[int(data['team'])]
     if data['correct']:
-        team.score += bm.current_question.value
+        if bm.current_question.daily_double:
+            team.score += bm.current_question.wager
+            bm.current_question.wager = None
+        else:
+            team.score += bm.current_question.value
     else:
-        team.score -= bm.current_question.value
+        if bm.current_question.daily_double:
+            team.score -= bm.current_question.wager
+            bm.current_question.wager = None
+        else:
+            team.score -= bm.current_question.value
     emit('team.award', {'team': team.id, 'score': team.score}, broadcast=True)
