@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import redis
 from flask import Flask
 from webassets.loaders import PythonLoader as PythonAssetsLoader
 
@@ -30,6 +30,13 @@ def create_app(object_name):
 
     bm = BoardManager()
     app.config['BOARD_MANAGER'] = bm
+    # Redis is optional
+    try:
+        r = redis.StrictRedis(host=app.config['REDIS_HOST'], db=app.config['REDIS_DB'])
+        app.config['REDIS'] = r
+        print("Connected to redis")
+    except:
+        app.config['REDIS'] = None
 
     # initialize the debug tool bar
     debug_toolbar.init_app(app)

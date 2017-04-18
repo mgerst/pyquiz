@@ -121,12 +121,16 @@ socket.on('buzzer.opened', function () {
     $(".team").removeClass("buzzedin");
 });
 
+function removeQuestion(category, id) {
+    $('#' + category + '_' + id).html("");
+    let old = document.getElementById(category + '_' + id);
+    let new_ = old.cloneNode(true);
+    old.parentNode.replaceChild(new_, old);
+}
+
 socket.on('question.close', function (data) {
     if (data.remove) {
-        $('#' + data.question.category + '_' + data.question.id).html("");
-        var old = document.getElementById(data.question.category + '_' + data.question.id);
-        var new_ = old.cloneNode(true);
-        old.parentNode.replaceChild(new_, old);
+        removeQuestion(data.question.category, data.question.id);
     }
     $('#question, #answer, #prompt').css({"visibility": "hidden"});
     $('#question, #answer, #prompt').css({"display": "none"});
@@ -135,6 +139,10 @@ socket.on('question.close', function (data) {
     $("#dailydouble").hide();
 
     current_question = null;
+});
+
+socket.on('question.hide', data => {
+    removeQuestion(data.category, data.id);
 });
 
 socket.on('buzzer.clicked', function (data) {

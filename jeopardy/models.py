@@ -1,9 +1,11 @@
+import json
 import logging
 import sys
 from collections import OrderedDict
 
 import yaml
 from flask import session
+from redis.client import StrictRedis
 
 from jeopardy.extensions import socketio
 
@@ -42,6 +44,21 @@ class Question(object):
 
         return ret
 
+    def persist(self, r: StrictRedis):
+        r.hset("quiz:board:{}:questions".format(self.category.board.id), "{}-{}".format(self.category.id, self.id),
+               str(self.visible))
+
+    def load(self, r: StrictRedis):
+        active = r.hget("quiz:board:{}:questions".format(self.category.board.id),
+                        "{}-{}".format(self.category.id, self.id))
+        if active is None:
+            self.visible = True
+        else:
+            self.visible = active.decode('utf-8') == 'True'
+
+        if not self.visible:
+            socketio.emit('question.hide', {'category': self.category.id, 'id': self.id})
+
 
 class Category(object):
     nextid = 1
@@ -74,6 +91,10 @@ class Category(object):
             'name': self.name,
             'questions': [ques.as_dict() for ques in self.items],
         }
+
+    def load(self, r: StrictRedis):
+        for q in self.items:
+            q.load(r)
 
 
 class Board(object):
@@ -108,6 +129,10 @@ class Board(object):
             'categories': [cat.as_dict() for cat in self.categories],
         }
 
+    def load(self, r: StrictRedis):
+        for category in self.categories:
+            category.load(r)
+
 
 class BoardManager(object):
     def __init__(self):
@@ -119,9 +144,18 @@ class BoardManager(object):
         self.admin_pw = ""
         self.num_teams = None
         self.buzzer = None
+        self._redis = None
 
-    def claim_team(self, name, id, key):
-        self.teams[id] = Team(id, name, key)
+    def claim_team(self, name: str, id: int, key: str, redis: StrictRedis):
+        team = Team(id, name, key)
+        self.teams[id] = team
+
+        print("About to persist")
+        if redis:
+            print("Persisting")
+            self.persist(redis)
+        print("persisted")
+
         socketio.emit('team.taken', {'id': id, 'name': name})
 
     def team_exists(self, id):
@@ -162,6 +196,9 @@ class BoardManager(object):
                 b.load_categories(board['categories'])
                 self.boards[board['order']] = b
 
+        if self._redis:
+            self.load(self._redis)
+
     def init_boards(self):
         self.board_iter = iter(self.boards)
 
@@ -188,13 +225,45 @@ class BoardManager(object):
             raise RuntimeWarning("Current board {} not in boards".format(self.current_board))
         return self.boards[self.current_board]
 
+    def persist(self, r: StrictRedis):
+        print("Writing board manager to redis")
+        for team in self.teams.values():
+            team.persist(r)
+
+    def load(self, r: StrictRedis):
+        result = r.smembers("quiz:teams")
+        for i in result:
+            i = int(i)
+            t = Team.load(r, i)
+            self.teams[i] = t
+
+        for b in self.boards.values():
+            b.load(r)
+
 
 class Team(object):
-    def __init__(self, id, name, key):
+    def __init__(self, id, name, key, score=0):
         self.id = id
         self.name = name
         self.key = key
-        self.score = 0
+        self.score = score
 
     def as_dict(self):
         return {'id': self.id, 'name': self.name, 'score': self.score}
+
+    def persist(self, r: StrictRedis):
+        print("Writing team to redis")
+        r.sadd("quiz:teams", self.id)
+        r.hset("quiz:team", self.id, json.dumps({
+            'id': self.id,
+            'name': self.name,
+            'key': self.key,
+            'score': self.score}
+        ))
+
+    @classmethod
+    def load(cls, r: StrictRedis, id: int) -> 'Team':
+        result = r.hget("quiz:team", id)
+        result = json.loads(result.decode('utf-8'))
+
+        return cls(int(result['id']), result['name'], result['key'], int(result['score']))

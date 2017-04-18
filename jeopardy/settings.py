@@ -5,6 +5,8 @@ class Config(object):
 
 class ProdConfig(Config):
     ENV = 'prod'
+    REDIS_DB = 2
+    REDIS_HOST = "localhost"
 
 
 class DevConfig(Config):
@@ -13,9 +15,13 @@ class DevConfig(Config):
     DEBUT_TB_INTERCEPT_REDIRECTS = False
 
     ASSETS_DEBUG = True
+    REDIS_DB = 2
+    REDIS_HOST = "localhost"
 
 
 class TestConfig(Config):
     ENV = 'test'
     DEBUG = True
     DEBUG_TB_INTERCEPT_REDIRECTS = False
+    REDIS_DB = 2
+    REDIS_HOST = "localhost"

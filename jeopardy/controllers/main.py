@@ -2,21 +2,28 @@ import time
 
 from flask import Blueprint, render_template, request, redirect, session
 from flask_socketio import emit
+from redis import StrictRedis
 
 from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager, Team
 from jeopardy.utils import team_required, admin_required
 
 bm = None  # type: BoardManager
+redis = None  # type: StrictRedis
 
 
 class MainBlueprint(Blueprint):
     def register(self, app, options, first_registration=False):
-        global bm
+        global bm, redis
 
         print("Registered main blueprint")
 
-        bm = app.config.get('BOARD_MANAGER')
+        bm = app.config.get('BOARD_MANAGER')  # type: BoardManager
+        redis = app.config.get('REDIS', None)
+
+        if redis:
+            bm._redis = redis
+
         super().register(app, options, first_registration)
 
 
@@ -45,6 +52,12 @@ def index():
     return render_template('index.html', teams=teams)
 
 
+@main.route("/session/clear")
+def clear_session():
+    session.clear()
+    return redirect('/')
+
+
 @main.route('/play/<int:team>', methods=['GET', 'POST'])
 def claim_team(team):
     if bm.num_teams < team < 0:
@@ -65,7 +78,7 @@ def claim_team(team):
             session['team'] = team
             session['logged_in'] = True
             session.modified = True
-            bm.claim_team(request.form['name'], team, request.form['key'])
+            bm.claim_team(request.form['name'], team, request.form['key'], redis)
             return redirect('/board')
         return redirect('/play/{}'.format(team))
 
@@ -98,6 +111,13 @@ def on_board_current():
 @socketio.on('board.next')
 def on_board_next():
     bm.next_board()
+
+
+@socketio.on('board.persist')
+@admin_required
+def persist():
+    if redis:
+        bm.persist(redis)
 
 
 @socketio.on('question.open')
@@ -155,6 +175,7 @@ def on_question_close(data):
     question = bm.current_question
     if remove:
         question.visible = False
+        question.persist(redis)
     bm.current_question = None
 
     ret_data = {
@@ -205,4 +226,8 @@ def team_award(data):
             bm.current_question.wager = None
         else:
             team.score -= bm.current_question.value
+
+    if redis:
+        team.persist(redis)
+
     emit('team.award', {'team': team.id, 'score': team.score}, broadcast=True)
