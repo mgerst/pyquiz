@@ -1,9 +1,4 @@
 class Jeopardy {
-    currentQuestion = null;
-    boardName = null;
-    categories = null;
-    questions = null;
-
     constructor() {
         this.socket = io.connect(`http://${document.domain}:${location.port}`);
 

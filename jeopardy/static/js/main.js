@@ -1,7 +1,18 @@
 var socket = io.connect('http://' + document.domain + ':' + location.port);
+let current_question = null;
+let iam = null;
 
 socket.on('connect', function() {
+    socket.emit('whoami');
     socket.emit('board.current');
+});
+
+socket.on('you.are', data => {
+    iam = data;
+
+    if (iam.admin) {
+        setupTeamAwards();
+    }
 });
 
 socket.on('board.current', function(data) {
@@ -18,6 +29,7 @@ socket.on('correct.answer', function (data) {
 });
 
 socket.on('question.open', function(data) {
+    current_question = data;
     var prompt = {};
     console.log(data);
     $('#game').hide();
@@ -35,6 +47,22 @@ socket.on('question.open', function(data) {
     $('#buzzer').show();
 });
 
+socket.on('team.taken', data => {
+    let team = data['id'];
+    let name = data['name'];
+
+    let div = document.querySelector(`.team[data-id="${team}"]`);
+    div.querySelector('.name').innerHTML = name;
+    div.querySelector('.score').innerHTML = '0';
+});
+
+socket.on('team.award', data => {
+    let team = data['team'];
+
+    let score = document.querySelector(`.team[data-id="${team}"] .score`);
+    score.innerHTML = data['score'];
+});
+
 socket.on('question.close', function (data) {
     console.log(data);
     if (data.remove) {
@@ -46,6 +74,8 @@ socket.on('question.close', function (data) {
     $('#question, #answer, #prompt').css({"visibility": "hidden"});
     $('#question, #answer, #prompt').css({"display": "none"});
     $('#game').show();
+
+    current_question = null;
 });
 
 $('#continue').click(function () {
@@ -114,12 +144,39 @@ function drawBoard(data) {
     setupClickListeners();
 }
 
+function teamAward(evt) {
+    console.debug(evt);
+
+    if (current_question) {
+        let team = evt.target.dataset.id;
+        socket.emit('team.award', {team: team, correct: true});
+    }
+}
+
+function teamDeduct(evt) {
+    evt.preventDefault();
+    if (current_question) {
+        let team = evt.target.dataset.id;
+        socket.emit('team.award', {team: team, correct: false});
+    }
+}
+
 function setupClickListeners() {
     let map = Array.prototype.map;
     let els = document.querySelectorAll(".question");
-    map.call(els, function(el) {
-        el.addEventListener("click", function(evt) {
+    map.call(els, function (el) {
+        el.addEventListener("click", function (evt) {
             socket.emit('question.open', {category: this.dataset.category, id: this.dataset.id});
         });
+    });
+}
+
+function setupTeamAwards() {
+    console.log("Setting up team awards");
+    let map = Array.prototype.map;
+    let teams = document.querySelectorAll('.team');
+    map.call(teams, el => {
+        el.addEventListener("click", teamAward);
+        el.addEventListener("contextmenu", teamDeduct);
     });
 }

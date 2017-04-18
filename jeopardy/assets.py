@@ -11,7 +11,6 @@ common_js = Bundle(
     'js/jquery-3.2.1.min.js',
     'js/socket.io.min.js',
     Bundle(
-        'js/jeopardy.js',
         'js/main.js',
         filters='jsmin'
     ),

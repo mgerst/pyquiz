@@ -280,3 +280,6 @@ input.subtract-points {
     font-size: 32px;
 }
 
+.team h5, .team span {
+    pointer-events: none;
+}

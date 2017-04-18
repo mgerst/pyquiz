@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, redirect, session
 from flask_socketio import emit
 
 from jeopardy.extensions import socketio
-from jeopardy.models import BoardManager
+from jeopardy.models import BoardManager, Team
 from jeopardy.utils import team_required, admin_required
 
 bm = None  # type: BoardManager
@@ -25,13 +25,19 @@ main = MainBlueprint('main', __name__)
 
 @main.route('/board')
 def board():
-    return render_template('board.html', admin=session.get('admin'))
+    teams = dict(bm.teams)
+
+    for i in range(1, bm.num_teams+1):
+        if i not in teams:
+            teams[i] = Team(i, None, None)
+
+    return render_template('board.html', teams=teams, admin=session.get('admin'))
 
 
 @main.route('/')
 def index():
     teams = {}
-    for i in range(1, 5):
+    for i in range(1, bm.num_teams+1):
         if bm.team_exists(i):
             teams[i] = bm.teams[i].name
         else:
@@ -39,8 +45,11 @@ def index():
     return render_template('index.html', teams=teams)
 
 
-@main.route('/play/<team>', methods=['GET', 'POST'])
+@main.route('/play/<int:team>', methods=['GET', 'POST'])
 def claim_team(team):
+    if bm.num_teams < team < 0:
+        return redirect('/')
+
     if request.method == 'GET':
         if bm.team_exists(team):
             return render_template('rejoin.html', team=team)
@@ -73,7 +82,7 @@ def admin():
 
 @socketio.on('whoami')
 def whoami():
-    emit('whoami', {
+    emit('you.are', {
         'admin': session.get('admin', False),
         'team': session.get('team', None),
         'logged_in': session.get('logged_in', False),
@@ -155,6 +164,9 @@ def team_award(data):
     if not bm.team_exists(data['team']):
         emit('error', {'error': "Team does not exist", 'value': data['team']})
 
-    team = bm.teams[data['team']]
-    team.score += bm.current_question.value
+    team = bm.teams[int(data['team'])]
+    if data['correct']:
+        team.score += bm.current_question.value
+    else:
+        team.score -= bm.current_question.value
     emit('team.award', {'team': team.id, 'score': team.score}, broadcast=True)

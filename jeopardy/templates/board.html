@@ -20,4 +20,17 @@
         {% endif %}
         <h1 id="question"></h1>
     </div>
+
+    <div id="teams">
+        {% for team in teams.values() %}
+            <div class="team" data-id="{{ team.id }}">
+                <h5 class="name">{% if team.name %}{{ team.name }}{% else %}Team {{ team.id }}{% endif %}</h5>
+                {% if team.key %}
+                <span class="score">{{ team.score }}</span>
+                {% else %}
+                <span class="score">-</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

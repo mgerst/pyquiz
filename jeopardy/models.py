@@ -118,6 +118,7 @@ class BoardManager(object):
         self.current_question = None  # type: Question
         self.teams = {}
         self.admin_pw = ""
+        self.num_teams = None
 
     def claim_team(self, name, id, key):
         self.teams[id] = Team(id, name, key)
@@ -143,6 +144,12 @@ class BoardManager(object):
                 self.admin_pw = data['password']
             except KeyError:
                 print("Need to set `password` in board.yml.")
+                sys.exit()
+
+            try:
+                self.num_teams = data['teams']
+            except KeyError:
+                print("Need to set `teams` in board.yml.")
                 sys.exit()
 
             for board in data['boards']:

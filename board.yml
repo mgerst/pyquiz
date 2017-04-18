@@ -68,3 +68,4 @@ boards:
             type: text
 
 password: changeme
+teams: 4
