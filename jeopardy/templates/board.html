@@ -20,8 +20,10 @@
                     href="javascript:void(0)" id="continue">Continue</a></p>
             <a href="javascript:void(0)" id="reopen">Re-open</a>
         {% else %}
-            <button type="button" id="buzzer">Buzzer</button>
-            <p>(or press the any key)</p>
+            <div id="buzzer-div">
+                <button type="button" id="buzzer">Buzzer</button>
+                <p>(or press the any key)</p>
+            </div>
         {% endif %}
         <h1 id="question"></h1>
         <h1 id="team_buzzed"></h1>

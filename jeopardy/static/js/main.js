@@ -25,7 +25,7 @@ socket.on('correct.answer', function (data) {
     $('#question').show();
     $('#continue').show();
     $('#correct-response').hide();
-    $('#buzzer').hide();
+    $('#buzzer-div').hide();
 });
 
 function sleep(ms) {
@@ -47,12 +47,12 @@ socket.on('question.open', async function (data) {
     $('#question, #answer, #prompt').css({"visibility": "visible"});
     $('#question, #prompt').hide();
     $('#continue').hide();
+    $('#reopen').hide();
 
     $('#prompt').fadeIn(1000);
     if ($('#correct-response') != null)
         $('#correct-response').show();
-    $('#buzzer').css('background-color', '#4caf50');
-    $('#buzzer').show();
+    $('#buzzer-div').show();
 });
 
 socket.on('team.taken', data => {
@@ -72,6 +72,13 @@ socket.on('team.award', data => {
     score.innerHTML = data['score'];
 });
 
+socket.on('buzzer.opened', function () {
+    $('#team_buzzed').html();
+    $('#buzzer').on("click");
+    $('#buzzer').css('background-color', '#4caf50');
+    $('#team_buzzed').html("");
+});
+
 socket.on('question.close', function (data) {
     console.log(data);
     if (data.remove) {
@@ -85,6 +92,13 @@ socket.on('question.close', function (data) {
     $('#game').show();
 
     current_question = null;
+});
+
+socket.on('buzzer.clicked', function (data) {
+    $('#buzzer').css('background-color', 'red');
+    $('#buzzer').off("click");
+    $('#team_buzzed').html("Team " + data.team + " buzzed in!");
+    $('#reopen').show();
 });
 
 $('#continue').click(function () {
@@ -103,6 +117,10 @@ function buzzer() {
 
 $('#buzzer').click(buzzer);
 $('body').keypress(buzzer);
+
+$('#reopen').click(function () {
+    socket.emit('buzzer.open', {});
+});
 
 function drawBoard(data) {
     let name = document.querySelector("#board-name");
@@ -177,6 +195,7 @@ function setupClickListeners() {
     map.call(els, function (el) {
         el.addEventListener("click", function (evt) {
             socket.emit('question.open', {category: this.dataset.category, id: this.dataset.id});
+            socket.emit('buzzer.open', {});
         });
     });
 }
