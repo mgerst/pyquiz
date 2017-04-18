@@ -29,6 +29,7 @@ class Question(object):
             'id': self.id,
             'value': self.value,
             'category': self.category.id,
+            'visible': self.visible,
         }
 
         if session.get('admin', False):
@@ -37,7 +38,6 @@ class Question(object):
                     'question': self.question,
                     'answer': self.answer,
                     'daily_double': self.daily_double,
-                    'visible': self.visible,
                 })
 
         return ret

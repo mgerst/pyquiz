@@ -5,7 +5,7 @@ from flask_socketio import emit
 
 from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager
-from jeopardy.utils import team_required, login_required, admin_required
+from jeopardy.utils import team_required, admin_required
 
 bm = None  # type: BoardManager
 
@@ -24,7 +24,6 @@ main = MainBlueprint('main', __name__)
 
 
 @main.route('/board')
-@login_required
 def board():
     return render_template('board.html', admin=session.get('admin'))
 
@@ -93,8 +92,6 @@ def on_question_open(data):
     cat_id = int(data['category'])
     question_id = int(data['id'])
 
-    print("Opening question {}-{}".format(cat_id, question_id))
-
     cat = bm.current.get_category(cat_id)
     question = cat.get_question(question_id)
     bm.current_question = question
@@ -137,7 +134,7 @@ def on_question_close(data):
 @socketio.on('buzzer.clicked')
 @team_required
 def buzzer_clicked(data):
-    emit('buzzer.clicked', {'team': data['team']}, broadcast=True)
+    emit('buzzer.clicked', {'team': session['team']}, broadcast=True)
 
 
 @socketio.on('buzzer.open')

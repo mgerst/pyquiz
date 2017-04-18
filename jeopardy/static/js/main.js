@@ -10,10 +10,11 @@ socket.on('board.current', function(data) {
 
 socket.on('correct.answer', function (data) {
     console.log("Showing " + data.answer);
-    $('#question').html(data.answer);
+    $('#question').html("Answer: " + data.answer);
     $('#question').show();
     $('#continue').show();
     $('#correct-response').hide();
+    $('#buzzer').hide();
 });
 
 socket.on('question.open', function(data) {
@@ -30,6 +31,8 @@ socket.on('question.open', function(data) {
     $('#prompt').fadeIn(1000);
     if ($('#correct-response') != null)
         $('#correct-response').show();
+    $('#buzzer').css('background-color', '#4caf50');
+    $('#buzzer').show();
 });
 
 socket.on('question.close', function (data) {
@@ -41,6 +44,7 @@ socket.on('question.close', function (data) {
         old.parentNode.replaceChild(new_, old);
     }
     $('#question, #answer, #prompt').css({"visibility": "hidden"});
+    $('#question, #answer, #prompt').css({"display": "none"});
     $('#game').show();
 });
 
@@ -52,6 +56,13 @@ $('#correct-response').click(function () {
     $('#question').show();
     socket.emit('correct.answer', {});
 });
+
+function buzzer() {
+    socket.emit('buzzer.clicked', {});
+    $('#buzzer').css('background-color', 'red');
+}
+
+$('#buzzer').click(buzzer);
 
 function drawBoard(data) {
     let name = document.querySelector("#board-name");
