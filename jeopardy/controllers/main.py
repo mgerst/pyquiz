@@ -99,6 +99,11 @@ def on_question_open(data):
     question = cat.get_question(question_id)
     bm.current_question = question
 
+    ret = question.as_dict()
+    ret['daily_double'] = question.daily_double
+    ret['question'] = question.question
+    question.visible = True
+
     emit('question.open', question.as_dict(), broadcast=True)
 
 
@@ -118,6 +123,7 @@ def show_correct_answer(data):
 def on_question_close(data):
     remove = data['remove']
     question = bm.current_question
+    question.visible = False
     bm.current_question = None
 
     ret_data = {

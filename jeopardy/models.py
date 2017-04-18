@@ -3,6 +3,7 @@ import sys
 from collections import OrderedDict
 
 import yaml
+from flask import session
 from flask_socketio import emit
 
 from jeopardy.extensions import socketio
@@ -24,15 +25,21 @@ class Question(object):
         emit('close-item', {'id': self.id, 'category': self.category.id})
 
     def as_dict(self):
-        return {
+        ret = {
             'id': self.id,
             'value': self.value,
-            'question': self.question,
-            'answer': self.answer,
-            'daily_double': self.daily_double,
-            'visible': self.visible,
             'category': self.category.id,
         }
+
+        if session.get('admin', False):
+            ret.update({
+                'question': self.question,
+                'answer': self.answer,
+                'daily_double': self.daily_double,
+                'visible': self.visible,
+            })
+
+        return ret
 
 
 class Category(object):
