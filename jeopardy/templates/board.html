@@ -9,16 +9,22 @@
         <tbody id="questions">
         </tbody>
     </table>
+    <div id="dailydouble">
+        <h1>Daily Double!</h1>
+    </div>
     <div id="prompt">
         <h1 id="answer"></h1>
         {% if admin %}
             <p><span id="correct-response"><a
                     href="javascript:void(0)">Correct Response</a> &nbsp;&nbsp;&nbsp;&nbsp; </span><a
                     href="javascript:void(0)" id="continue">Continue</a></p>
+            <a href="javascript:void(0)" id="reopen">Re-open</a>
         {% else %}
             <button type="button" id="buzzer">Buzzer</button>
+            <p>(or press the any key)</p>
         {% endif %}
         <h1 id="question"></h1>
+        <h1 id="team_buzzed"></h1>
     </div>
 
     <div id="teams">

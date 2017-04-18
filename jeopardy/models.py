@@ -66,7 +66,6 @@ class Category(object):
             bl = self.add_question(question['value'], question['clue'], question['answer'], question['daily_double'])
 
     def get_question(self, id : int) -> Question:
-        print(self.items)
         return self.items[id - 1]
 
     def as_dict(self):
@@ -119,6 +118,7 @@ class BoardManager(object):
         self.teams = {}
         self.admin_pw = ""
         self.num_teams = None
+        self.buzzer = None
 
     def claim_team(self, name, id, key):
         self.teams[id] = Team(id, name, key)

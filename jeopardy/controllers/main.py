@@ -143,12 +143,15 @@ def on_question_close(data):
 @socketio.on('buzzer.clicked')
 @team_required
 def buzzer_clicked(data):
-    emit('buzzer.clicked', {'team': session['team']}, broadcast=True)
+    if not bm.buzzer:
+        bm.buzzer = True
+        emit('buzzer.clicked', {'team': session['team']}, broadcast=True)
 
 
 @socketio.on('buzzer.open')
 @admin_required
-def buzzer_open():
+def buzzer_open(data):
+    bm.buzzer = False
     emit('buzzer.opened', {'start': int(time.time())}, broadcast=True)
 
 

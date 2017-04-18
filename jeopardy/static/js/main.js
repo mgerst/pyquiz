@@ -28,11 +28,19 @@ socket.on('correct.answer', function (data) {
     $('#buzzer').hide();
 });
 
-socket.on('question.open', function(data) {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+socket.on('question.open', async function (data) {
     current_question = data;
     var prompt = {};
     console.log(data);
     $('#game').hide();
+    if (data.daily_double) {
+        $('#dailydouble').show();
+        await sleep(5000);
+    }
     $('#question, #answer, #prompt').css({"display": "block"});
     $('#question').html(data.answer);
     $('#answer').html(data.question);
@@ -93,6 +101,7 @@ function buzzer() {
 }
 
 $('#buzzer').click(buzzer);
+$('body').keypress(buzzer);
 
 function drawBoard(data) {
     let name = document.querySelector("#board-name");

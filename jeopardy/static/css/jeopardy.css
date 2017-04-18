@@ -236,7 +236,7 @@ input.subtract-points {
     display: inline;
 }
 
-#prompt {
+#prompt, #dailydouble {
     display: none;
     height: 100%;
     width: 100%;
@@ -270,7 +270,7 @@ input.subtract-points {
 }
 
 #buzzer {
-    background-color: #4CAF50; /* Green */
+    background-color: red;
     border: none;
     color: white;
     padding: 15px 32px;
