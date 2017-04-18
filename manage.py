@@ -3,6 +3,7 @@
 import os
 import subprocess
 
+import redis
 from flask_script import Manager, Server
 from flask_script.commands import ShowUrls, Clean
 from jeopardy import create_app
@@ -37,6 +38,14 @@ def lint():
 @manager.command
 def test():
     subprocess.call(["py.test"])
+
+
+@manager.command
+def clear_redis():
+    r = redis.StrictRedis(host='localhost', db=2)
+    # Redis doesn't support wildcard deletes apparently.
+    # https://stackoverflow.com/questions/4006324/how-to-atomically-delete-keys-matching-a-pattern-using-redis
+    r.eval("return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, "quiz:*")
 
 if __name__ == "__main__":
     manager.run()

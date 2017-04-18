@@ -32,6 +32,9 @@ main = MainBlueprint('main', __name__)
 
 @main.route('/board')
 def board():
+    if 'team' in session and session['team'] not in bm.teams:
+        session.clear()
+        return redirect('/')
     teams = dict(bm.teams)
 
     for i in range(1, bm.num_teams+1):
