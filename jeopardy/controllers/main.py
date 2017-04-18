@@ -26,7 +26,7 @@ main = MainBlueprint('main', __name__)
 @main.route('/board')
 @login_required
 def board():
-    return render_template('board.html')
+    return render_template('board.html', admin=session.get('admin'))
 
 
 @main.route('/')
@@ -103,7 +103,6 @@ def on_question_open(data):
     ret['daily_double'] = question.daily_double
     ret['question'] = question.question
     question.visible = True
-    print(ret)
 
     emit('question.open', ret, broadcast=True)
 
@@ -116,7 +115,6 @@ def show_correct_answer(data):
     ret_data = {
         'answer': question.answer
     }
-    print("ajslkdfjl")
     emit('correct.answer', ret_data, broadcast=True)
 
 

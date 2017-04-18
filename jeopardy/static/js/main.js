@@ -12,6 +12,8 @@ socket.on('correct.answer', function (data) {
     console.log("Showing " + data.answer);
     $('#question').html(data.answer);
     $('#question').show();
+    $('#continue').show();
+    $('#correct-response').hide();
 });
 
 socket.on('question.open', function(data) {
@@ -21,26 +23,35 @@ socket.on('question.open', function(data) {
     $('#question, #answer, #prompt').css({"display": "block"});
     $('#question').html(data.answer);
     $('#answer').html(data.question);
-    var font_size = 24;
-    /*
-    do {
-        $('#question, #answer').css({"font-size": font_size});
-        font_size++;
-    } while (!getScrollBarState().vScrollbar && font_size < 72)
-    */
-    $('#question, #answer').css({"font-size": Math.max(24, font_size - 2)});
     $('#question, #answer, #prompt').css({"visibility": "visible"});
     $('#question, #prompt').hide();
+    $('#continue').hide();
 
     $('#prompt').fadeIn(1000);
-    if ($('#correct-response').html() != null)
+    if ($('#correct-response') != null)
         $('#correct-response').show();
 });
 
-function showAnswer() {
+socket.on('question.close', function (data) {
+    console.log(data);
+    if (data.remove) {
+        $('#' + data.question.category + '_' + data.question.id).html("");
+        var old = document.getElementById(data.question.category + '_' + data.question.id);
+        var new_ = old.cloneNode(true);
+        old.parentNode.replaceChild(new_, old);
+    }
+    $('#question, #answer, #prompt').css({"visibility": "hidden"});
+    $('#game').show();
+});
+
+$('#continue').click(function () {
+    socket.emit('question.close', {remove: true});
+});
+
+$('#correct-response').click(function () {
     $('#question').show();
     socket.emit('correct.answer', {});
-}
+});
 
 function drawBoard(data) {
     let name = document.querySelector("#board-name");
@@ -75,8 +86,10 @@ function drawBoard(data) {
         for (let c = 0; c < data.categories.length; c++) {
             if (c in quests && i in quests[c]) {
                 let question = quests[c][i];
-
-                row_template += `<td class="question" data-category="${question.category}" data-id="${question.id}">${question.value}</td>`;
+                if (question.visible)
+                    row_template += `<td class="question" data-category="${question.category}" data-id="${question.id}" id="${question.category}_${question.id}">${question.value}</td>`;
+                else
+                    row_template += `<td></td>`;
             }
         }
 

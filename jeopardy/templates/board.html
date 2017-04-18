@@ -11,8 +11,11 @@
     </table>
     <div id="prompt">
         <h1 id="answer"></h1>
-        <p><span id="correct-response"><a href="javascript:void(0)" onclick="showAnswer();">Correct Response</a> &nbsp;&nbsp;&nbsp;&nbsp; </span><a
-                href="javascript:void(0)">Continue</a></p>
+        {% if admin %}
+            <p><span id="correct-response"><a
+                    href="javascript:void(0)">Correct Response</a> &nbsp;&nbsp;&nbsp;&nbsp; </span><a
+                    href="javascript:void(0)" id="continue">Continue</a></p>
+        {% endif %}
         <h1 id="question"></h1>
     </div>
 {% endblock %}
