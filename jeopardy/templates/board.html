@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1 id="board-name" style="color: white">Home Page</h1>
+    <h1 id="board-name" style="color: white">&nbsp;</h1>
 
     <table id="game">
         <thead id="category-headers">
@@ -27,9 +27,9 @@
         <h1 id="team_buzzed"></h1>
     </div>
 
-    <div id="teams">
+    <div id="stats">
         {% for team in teams.values() %}
-            <div class="team" data-id="{{ team.id }}">
+            <div class="team" data-id="{{ team.id }}" data-exists="{% if team.key %}true{% else %}false{% endif %}">
                 <h5 class="name">{% if team.name %}{{ team.name }}{% else %}Team {{ team.id }}{% endif %}</h5>
                 {% if team.key %}
                 <span class="score">{{ team.score }}</span>

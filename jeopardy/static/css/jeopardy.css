@@ -92,7 +92,7 @@ textarea#title {
     border: 3px solid #2a3698;
 }
 
-#game tbody td.ie-hack {
+#game tbody td:hover {
     border: 3px solid #ffff5f;
 }
 
@@ -177,41 +177,6 @@ textarea#title {
     float: right;
 }
 
-
-#stats {
-    position: fixed;
-    bottom: 0;
-    background-color: #ffffff;
-    width: 100%;
-    text-align: center;
-    height: 110px;
-    display: none;
-    left: 0;
-}
-
-#stats h3 {
-    margin: 0;
-    padding: 0;
-}
-
-#stats input.team-name {
-    border:none;
-    font-size:18px;
-    font-weight:bold;
-    text-align:center;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    width:100%;
-    display:block;
-}
-
-#stats table {
-    margin: auto;
-}
-
-#stats table th {
-    border-bottom: 1px solid black;
-}
-
 input.add-points {
     color: #66cc33;
     font-family: "Courier New", Courier, monospace;
@@ -278,6 +243,21 @@ input.subtract-points {
     text-decoration: none;
     display: inline-block;
     font-size: 32px;
+}
+
+#stats {
+    position: fixed;
+    bottom: 0;
+    background-color: #ffffff;
+    width: 100%;
+    text-align: center;
+    height: 110px;
+    display: flex;
+    left: 0;
+}
+
+#stats .team {
+    flex-grow: 1;
 }
 
 .team h5, .team span {
