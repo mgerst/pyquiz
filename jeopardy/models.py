@@ -4,7 +4,6 @@ from collections import OrderedDict
 
 import yaml
 from flask import session
-from flask_socketio import emit
 
 from jeopardy.extensions import socketio
 
@@ -24,9 +23,6 @@ class Question(object):
         # Daily Double Stuff
         self.double_team = None
         self.wager = None
-
-    def mark_answered(self):
-        emit('close-item', {'id': self.id, 'category': self.category.id})
 
     def as_dict(self, sanitized=False):
         ret = {
@@ -172,9 +168,16 @@ class BoardManager(object):
     def next_board(self):
         try:
             self.current_board = next(self.board_iter)
-            emit('board.current', {'id': self.current_board})
+            socketio.emit('board.current', {'id': self.current_board})
         except StopIteration:
-            emit('game.end')
+            winner = None
+            max = 0
+
+            for team in self.teams.values():
+                if team.score > max:
+                    max = team.score
+                    winner = team
+            socketio.emit('game.end', {'winner': winner.as_dict()})
 
     @property
     def current(self) -> Board:

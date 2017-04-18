@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1 id="board-name" style="color: white">&nbsp;</h1>
+    <div id="header">
+        <h1 id="board-name" style="color: white">&nbsp;</h1>
+        {% if admin %}
+        <button type="button" id="next_board" style="display: none;">Next</button>
+        {% else %}
+        <div>&nbsp;</div>
+        {% endif %}
+    </div>
 
     <table id="game">
         <thead id="category-headers">
@@ -48,5 +55,9 @@
                 {% endif %}
             </div>
         {% endfor %}
+    </div>
+
+    <div id="winner" style="display: none;">
+        <h1>The winner is: <span id="winner_name"></span>!</h1>
     </div>
 {% endblock %}

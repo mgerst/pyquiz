@@ -214,6 +214,7 @@ input.subtract-points {
     background-color: #2a3698;
     color: #FFFFFF;
     text-align: center;
+    margin-top: 60px;
 }
 
 #prompt a:link, #prompt a:visited, #prompt a:hover {
@@ -257,6 +258,22 @@ button {
 
 #correct-response {
     background-color: green;
+}
+
+#continue {
+    background-color: cornflowerblue;
+}
+
+#board-name {
+    float: left;
+}
+
+#next_board {
+    background-color: cornflowerblue;
+    padding: 10px 28px;
+    display: inline;
+    /*float: right;*/
+    margin-left: 10px;
 }
 
 #stats {

@@ -12,11 +12,25 @@ socket.on('you.are', data => {
 
     if (iam.admin) {
         setupTeamAwards();
+        $("#next_board").on("click", data => {
+            socket.emit('board.next');
+        });
+        $("#next_board").show();
     }
 });
 
 socket.on('board.current', function(data) {
     drawBoard(data);
+});
+
+socket.on('game.end', data => {
+    winner = data.winner;
+
+    document.getElementById("winner_name").innerHTML = winner.name;
+
+    $("#game").hide();
+    $("#header").hide();
+    $("#winner").show();
 });
 
 socket.on('correct.answer', function (data) {

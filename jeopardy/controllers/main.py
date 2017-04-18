@@ -95,6 +95,11 @@ def on_board_current():
     emit('board.current', cur_board.as_dict())
 
 
+@socketio.on('board.next')
+def on_board_next():
+    bm.next_board()
+
+
 @socketio.on('question.open')
 @admin_required
 def on_question_open(data):
