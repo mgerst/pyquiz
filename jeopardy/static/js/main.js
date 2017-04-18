@@ -52,6 +52,7 @@ socket.on('team.taken', data => {
     let name = data['name'];
 
     let div = document.querySelector(`.team[data-id="${team}"]`);
+    div.dataset.exists = "true";
     div.querySelector('.name').innerHTML = name;
     div.querySelector('.score').innerHTML = '0';
 });
@@ -147,7 +148,7 @@ function drawBoard(data) {
 function teamAward(evt) {
     console.debug(evt);
 
-    if (current_question) {
+    if (current_question && evt.target.dataset.exists === "true") {
         let team = evt.target.dataset.id;
         socket.emit('team.award', {team: team, correct: true});
     }
@@ -155,7 +156,7 @@ function teamAward(evt) {
 
 function teamDeduct(evt) {
     evt.preventDefault();
-    if (current_question) {
+    if (current_question && evt.target.dataset.exists === "true") {
         let team = evt.target.dataset.id;
         socket.emit('team.award', {team: team, correct: false});
     }

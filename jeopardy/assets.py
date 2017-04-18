@@ -2,7 +2,6 @@ from flask_assets import Bundle
 
 common_css = Bundle(
     'css/jeopardy.css',
-    'css/print.css',
     filters='cssmin',
     output='public/css/common.css'
 )

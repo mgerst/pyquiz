@@ -168,7 +168,7 @@ class BoardManager(object):
     def next_board(self):
         try:
             self.current_board = next(self.board_iter)
-            emit('board.switch', {'id': self.current_board})
+            emit('board.current', {'id': self.current_board})
         except StopIteration:
             emit('game.end')
 
