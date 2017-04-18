@@ -115,7 +115,7 @@ def on_question_open(data):
 
 @socketio.on('correct.answer')
 @admin_required
-def show_correct_answer(data):
+def show_correct_answer():
     question = bm.current_question
 
     ret_data = {
@@ -142,7 +142,7 @@ def on_question_close(data):
 
 @socketio.on('buzzer.clicked')
 @team_required
-def buzzer_clicked(data):
+def buzzer_clicked():
     if not bm.buzzer:
         bm.buzzer = True
         emit('buzzer.clicked', {'team': session['team']}, broadcast=True)
@@ -150,7 +150,7 @@ def buzzer_clicked(data):
 
 @socketio.on('buzzer.open')
 @admin_required
-def buzzer_open(data):
+def buzzer_open():
     bm.buzzer = False
     emit('buzzer.opened', {'start': int(time.time())}, broadcast=True)
 

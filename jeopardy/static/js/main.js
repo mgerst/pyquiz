@@ -74,7 +74,7 @@ socket.on('team.award', data => {
 
 socket.on('buzzer.opened', function () {
     $('#team_buzzed').html();
-    $('#buzzer').on("click");
+    $('#buzzer').click(buzzer);
     $('#buzzer').css('background-color', '#4caf50');
     $('#team_buzzed').html("");
 });
@@ -95,8 +95,10 @@ socket.on('question.close', function (data) {
 });
 
 socket.on('buzzer.clicked', function (data) {
+    console.log(data);
     $('#buzzer').css('background-color', 'red');
     $('#buzzer').off("click");
+    $('#buzzer-div').show();
     $('#team_buzzed').html("Team " + data.team + " buzzed in!");
     $('#reopen').show();
 });
@@ -107,11 +109,12 @@ $('#continue').click(function () {
 
 $('#correct-response').click(function () {
     $('#question').show();
-    socket.emit('correct.answer', {});
+    socket.emit('correct.answer');
+    socket.emit('buzzer.close');
 });
 
 function buzzer() {
-    socket.emit('buzzer.clicked', {});
+    socket.emit('buzzer.clicked');
     $('#buzzer').css('background-color', 'red');
 }
 
@@ -119,7 +122,7 @@ $('#buzzer').click(buzzer);
 $('body').keypress(buzzer);
 
 $('#reopen').click(function () {
-    socket.emit('buzzer.open', {});
+    socket.emit('buzzer.open');
 });
 
 function drawBoard(data) {
@@ -195,7 +198,7 @@ function setupClickListeners() {
     map.call(els, function (el) {
         el.addEventListener("click", function (evt) {
             socket.emit('question.open', {category: this.dataset.category, id: this.dataset.id});
-            socket.emit('buzzer.open', {});
+            socket.emit('buzzer.open');
         });
     });
 }

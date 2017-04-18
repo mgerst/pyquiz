@@ -15,18 +15,19 @@
     <div id="prompt">
         <h1 id="answer"></h1>
         {% if admin %}
-            <p><span id="correct-response"><a
-                    href="javascript:void(0)">Correct Response</a> &nbsp;&nbsp;&nbsp;&nbsp; </span><a
-                    href="javascript:void(0)" id="continue">Continue</a></p>
-            <a href="javascript:void(0)" id="reopen">Re-open</a>
+            <p>
+                <button type="button" id="correct-response">Correct Response</button>
+                <button type="button" id="continue">Continue</button>
+            </p>
+            <button type="button" id="reopen">Re-open</button>
         {% else %}
             <div id="buzzer-div">
                 <button type="button" id="buzzer">Buzzer</button>
                 <p>(or press the any key)</p>
             </div>
         {% endif %}
-        <h1 id="question"></h1>
         <h1 id="team_buzzed"></h1>
+        <h1 id="question"></h1>
     </div>
 
     <div id="stats">
@@ -34,9 +35,9 @@
             <div class="team" data-id="{{ team.id }}" data-exists="{% if team.key %}true{% else %}false{% endif %}">
                 <h5 class="name">{% if team.name %}{{ team.name }}{% else %}Team {{ team.id }}{% endif %}</h5>
                 {% if team.key %}
-                <span class="score">{{ team.score }}</span>
+                    <span class="score">{{ team.score }}</span>
                 {% else %}
-                <span class="score">-</span>
+                    <span class="score">-</span>
                 {% endif %}
             </div>
         {% endfor %}

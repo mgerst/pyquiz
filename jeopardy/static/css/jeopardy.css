@@ -234,8 +234,7 @@ input.subtract-points {
     padding-right:5%;
 }
 
-#buzzer {
-    background-color: red;
+button {
     border: none;
     color: white;
     padding: 15px 32px;
@@ -243,6 +242,18 @@ input.subtract-points {
     text-decoration: none;
     display: inline-block;
     font-size: 32px;
+}
+
+#buzzer, #reopen {
+    background-color: red;
+}
+
+#correct-response {
+    background-color: green;
+}
+
+#continue {
+    background-color: cornflowerblue;
 }
 
 #stats {
