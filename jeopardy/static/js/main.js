@@ -42,6 +42,14 @@ socket.on('correct.answer', function (data) {
     $('#buzzer-div').hide();
 });
 
+socket.on('question.admin_answer', data => {
+    if (!iam.admin) return;
+
+    console.log("Showing " + data.answer);
+    $('#question').html("Answer: " + data.answer);
+    $('#question').show();
+});
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

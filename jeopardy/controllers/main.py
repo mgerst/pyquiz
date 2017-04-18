@@ -146,8 +146,10 @@ def on_question_open(data):
     if question.daily_double:
         del ret['question']
         emit('double.open', ret, broadcast=True)
+        emit('question.admin_answer', {'answer': question.answer})
     else:
         emit('question.open', ret, broadcast=True)
+        emit('question.admin_answer', {'answer': question.answer})
 
 
 @socketio.on('double.wager')
@@ -158,6 +160,7 @@ def on_double(data):
     question.wager = int(data['wager'])
 
     emit('double.start', {'team': data['team'], 'question': question.question}, broadcast=True)
+    emit('question.admin_answer', {'answer': question.answer})
 
 
 @socketio.on('correct.answer')
