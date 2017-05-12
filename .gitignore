@@ -92,3 +92,4 @@ ENV/
 .idea/
 
 static/public
+jeopardy/static/public
