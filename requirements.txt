@@ -1,10 +1,10 @@
-Flask==0.11.1
+Flask>=0.12
 
 # Flask Extensions
-Flask-Assets==0.11
-Flask-DebugToolbar==0.10.0
+Flask-Assets==0.12
+Flask-DebugToolbar==0.10.1
 Flask-Script==2.0.5
-Flask-Socketio==2.7.1
+Flask-Socketio==2.8.4
 
 # Other
 cssmin==0.2.0
