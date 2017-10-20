@@ -24,7 +24,7 @@ module.exports = {
     dev: {
         env: require('./dev.env'),
         port: 8080,
-        autoOpenBrowser: true,
+        autoOpenBrowser: false,
         assetsSubDirectory: 'jeopardy/static',
         assetsPublicPath: process.env.PUBLIC_PATH || 'http://localhost:8080/static/',
         proxyTable: {},
