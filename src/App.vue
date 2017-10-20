@@ -1,14 +1,361 @@
 <template>
-    <div id="app">What? {{ name }}</div>
+    <div id="app">
+        <div id="header">
+            <h1 id="board-name" style="color: white;">{{ name }}</h1>
+            <div>&nbsp;</div>
+        </div>
+
+        <table id="game" v-show="!isQuestionOpen">
+            <thead id="category-headers">
+                <tr>
+                    <th v-for="cat in categories">{{ cat }}</th>
+                </tr>
+            </thead>
+            <tbody id="questions">
+                <tr v-for="n in categories.length">
+                    <jeopardy-cell v-for="(cat, index) in categories" :item="cells[cat][n - 1]" :key="n + index"></jeopardy-cell>
+                </tr>
+            </tbody>
+        </table>
+
+        <jeopardy-double v-if="isQuestionOpen"></jeopardy-double>
+        <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
+
+        <div id="stats">
+            <jeopardy-team v-for="team in teams" :team="team" :key="team.id"></jeopardy-team>
+        </div>
+    </div>
 </template>
 
 <script>
+    import JeopardyCell from './components/Cell.vue';
+    import JeopardyTeam from './components/Team.vue';
+    import JeopardyPrompt from './components/Prompt.vue';
+    import JeopardyDouble from './components/Double.vue';
+    import {mapGetters} from 'vuex';
+
     export default {
         name: 'app',
         data() {
             return {
-                name: 'Finally!'
+                name: 'Test Board'
             }
-        }
+        },
+        methods: {},
+        components: {
+            'jeopardy-cell': JeopardyCell,
+            'jeopardy-team': JeopardyTeam,
+            JeopardyPrompt,
+            JeopardyDouble,
+        },
+        computed: mapGetters(['categories', 'cells', 'teams', 'isQuestionOpen'])
     }
 </script>
+
+<style>
+    body {
+        background-color: #2a3698;
+        height: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        padding-bottom: 100px;
+    }
+
+    label {
+        display: block;
+        font-size: 16px;
+    }
+
+    input, textarea, select {
+        display: block;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        margin: auto;
+    }
+
+    #board-name {
+        color: white;
+    }
+
+    textarea {
+        padding: 5px;
+    }
+    .clear {
+        clear: both;
+    }
+    .hide {
+        display: none;
+    }
+
+    .edit {
+        border: 2px dashed #cccccc;
+        text-align: center;
+    }
+
+    .edit:hover, textarea.active {
+        border: 2px inset gray;
+    }
+
+
+    #title {
+        text-align: center;
+        font-size: 36px;
+        margin: auto;
+        line-height: 36px;
+    }
+
+    textarea#title {
+        height: 50px;
+        width: 90%;
+        color: #012b45;
+    }
+
+    #game {
+        width: 100%;
+        background-color: #000000;
+        padding: 0;
+        margin: 0;
+        margin: auto;
+        font-size: 16px;
+    }
+
+    #game textarea {
+        width: 90%;
+        height: 30px;
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    #game h3 {
+        color: #ffff5f;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #game tbody td, #game thead th {
+        vertical-align: middle;
+        background-color: #2a3698;
+        padding: 5px;
+        text-align: center;
+        width: 16%;
+        color: #ffff5f;
+        height: 60px;
+        font-size: 20px;
+
+    }
+
+    #game tbody td {
+        cursor: pointer;
+        height: 100px;
+        border: 3px solid #2a3698;
+    }
+
+    #game tbody td:hover {
+        border: 3px solid #ffff5f;
+    }
+
+    /*#game tbody td.clean:hover {
+        border:3px solid #ffff5f;
+    }
+
+    #game tbody td.dirty:hover {
+        border:3px solid #2a3698;
+    }*/
+
+    #game tbody td.dirty h3 {
+        color: #2a3698;
+    }
+
+    #game tfoot td {
+        text-align: center;
+        background-color: #2a3698;
+    }
+
+    .submit {
+        margin: auto;
+    }
+
+    #modal {
+        display: none;
+        background-color: #fff;
+        padding: 5px;
+        border: 2px dashed #ccc;
+    }
+
+    #modal {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #modal textarea {
+        width: 500px;
+        height: 120px;
+        font-size: 16px;
+    }
+
+    #options {
+        background-color: #fff;
+        width: 500px;
+        padding: 10px;
+        margin: auto;
+        margin-top: 75px;
+    }
+
+    #options h1 {
+        color: #2a3698;
+        font-size: 22px;
+        text-align: center;
+    }
+
+    h1 {
+        color: white;
+    }
+
+    #options label {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    #options select, #options label, #options input {
+        margin-top: 5px;
+    }
+
+    #options select {
+        width: 130px;
+    }
+
+    #options input {
+        width: 100px;
+    }
+    #options p {
+        margin-bottom: 0px;
+    }
+
+    .tip {
+        float: left;
+    }
+
+    .links {
+        float: right;
+    }
+
+    input.add-points {
+        color: #66cc33;
+        font-family: "Courier New", Courier, monospace;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0px;
+        background-color: #FFFFFF;
+        border: none;
+        display: inline;
+    }
+
+    input.subtract-points {
+        color: #ff0000;
+        font-family: "Courier New", Courier, monospace;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0px;
+        background-color: #FFFFFF;
+        border: none;
+        display: inline;
+    }
+
+    #prompt, #dailydouble {
+        display: none;
+        height: 100%;
+        width: 100%;
+        background-color: #2a3698;
+        color: #FFFFFF;
+        text-align: center;
+        margin-top: 60px;
+    }
+
+    #prompt a:link, #prompt a:visited, #prompt a:hover {
+        color: #fff;
+        font-size: 18px;
+        text-decoration: underline;
+    }
+
+    #prompt a:hover {
+        text-decoration: none;
+    }
+
+    #simplemodal-overlay {
+        background-color: #000;
+    }
+
+    #answer {
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    #question {
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 32px;
+        background-color: cornflowerblue;
+    }
+
+    #buzzer, #reopen {
+        background-color: red;
+    }
+
+    #correct-response {
+        background-color: green;
+    }
+
+    #continue {
+        background-color: cornflowerblue;
+    }
+
+    #board-name {
+        float: left;
+    }
+
+    #next_board {
+        background-color: cornflowerblue;
+        padding: 10px 28px;
+        display: inline;
+        /*float: right;*/
+        margin-left: 10px;
+    }
+
+    #stats {
+        position: fixed;
+        bottom: 0;
+        background-color: #ffffff;
+        width: 100%;
+        text-align: center;
+        height: 110px;
+        display: flex;
+        left: 0;
+    }
+
+    #stats .team {
+        flex-grow: 1;
+        margin: 10px;
+    }
+
+    .buzzedin {
+        border: 1px solid green;
+    }
+
+    .team h5, .team span {
+        pointer-events: none;
+    }
+
+    a {
+        color: white;
+    }
+</style>
