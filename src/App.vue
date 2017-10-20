@@ -1,55 +1,56 @@
 <template>
-    <div id="app">
-        <div id="header">
-            <h1 id="board-name" style="color: white;">{{ name }}</h1>
-            <div>&nbsp;</div>
-        </div>
-
-        <table id="game" v-show="!isQuestionOpen">
-            <thead id="category-headers">
-                <tr>
-                    <th v-for="cat in categories">{{ cat }}</th>
-                </tr>
-            </thead>
-            <tbody id="questions">
-                <tr v-for="n in categories.length">
-                    <jeopardy-cell v-for="(cat, index) in categories" :item="cells[cat][n - 1]" :key="n + index"></jeopardy-cell>
-                </tr>
-            </tbody>
-        </table>
-
-        <jeopardy-double v-if="isQuestionOpen"></jeopardy-double>
-        <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
-
-        <div id="stats">
-            <jeopardy-team v-for="team in teams" :team="team" :key="team.id"></jeopardy-team>
-        </div>
+  <div id="app">
+    <div id="header">
+      <h1 id="board-name" style="color: white;">{{ name }}</h1>
+      <div>&nbsp;</div>
     </div>
+
+    <table id="game" v-show="!isQuestionOpen">
+      <thead id="category-headers">
+      <tr>
+        <th v-for="cat in categories">{{ cat }}</th>
+      </tr>
+      </thead>
+      <tbody id="questions">
+      <tr v-for="n in 5">
+        <jeopardy-cell v-for="(cat, index) in categories" :item="cells[cat][n - 1]" :key="n + index"></jeopardy-cell>
+      </tr>
+      </tbody>
+    </table>
+
+    <jeopardy-double v-if="isQuestionOpen"></jeopardy-double>
+    <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
+
+    <div id="stats">
+      <jeopardy-team v-for="team in teams" :team="team" :open="true" :prize="200" :key="team.id"></jeopardy-team>
+    </div>
+  </div>
 </template>
 
 <script>
-    import JeopardyCell from './components/Cell.vue';
-    import JeopardyTeam from './components/Team.vue';
-    import JeopardyPrompt from './components/Prompt.vue';
-    import JeopardyDouble from './components/Double.vue';
-    import {mapGetters} from 'vuex';
+import JeopardyCell from './components/Cell.vue';
+import JeopardyTeam from './components/Team.vue';
+import JeopardyPrompt from './components/Prompt.vue';
+import JeopardyDouble from './components/Double.vue';
+import {mapGetters} from 'vuex';
 
-    export default {
-        name: 'app',
-        data() {
-            return {
-                name: 'Test Board'
-            }
-        },
-        methods: {},
-        components: {
-            'jeopardy-cell': JeopardyCell,
-            'jeopardy-team': JeopardyTeam,
-            JeopardyPrompt,
-            JeopardyDouble,
-        },
-        computed: mapGetters(['categories', 'cells', 'teams', 'isQuestionOpen'])
+export default {
+  name: 'app',
+  data() {
+    return {
+      name: 'Test Board',
     }
+  },
+  methods: {
+  },
+  components: {
+    'jeopardy-cell': JeopardyCell,
+    'jeopardy-team': JeopardyTeam,
+    JeopardyPrompt,
+    JeopardyDouble,
+  },
+  computed: mapGetters(['categories', 'cells', 'teams', 'isQuestionOpen'])
+}
 </script>
 
 <style>
