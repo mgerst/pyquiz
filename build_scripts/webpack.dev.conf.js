@@ -14,9 +14,6 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
-  entry: {
-    app: ['webpack-hot-middleware/client?path=http://localhost:8080/__webpack_hmr&timeout=20000',]
-  },
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
