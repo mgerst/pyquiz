@@ -85,7 +85,7 @@ export default new Vuex.Store({
       item.show = false;
 
       state.question = item;
-      state.dailydouble.active = item.dailydouble;
+      state.dailydouble.active = item.dailydouble || false;
     },
     closeQuestion(state) {
       state.question = null;

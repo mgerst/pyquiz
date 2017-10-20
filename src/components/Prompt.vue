@@ -1,5 +1,5 @@
 <template>
-  <div id="prompt" v-if="!openQuestion.dailydouble || hasWager">
+  <div id="prompt" v-if="!isDailyDouble || hasWager">
     <h1 id="answer">{{ openQuestion.clue }}</h1>
     <button type="button" id="reopen" v-if="buzzedTeam" @click="reopen">Re-Open</button>
     <div id="buzzer-div" v-show="buzzedTeam === null">
@@ -17,7 +17,7 @@
   export default {
     name: 'jeopardy-prompt',
     computed: {
-      ...mapGetters(['openQuestion', 'hasWager', 'currentTeam', 'buzzedTeam', 'isAdmin'])
+      ...mapGetters(['openQuestion', 'hasWager', 'currentTeam', 'buzzedTeam', 'isAdmin', 'isDailyDouble'])
     },
     data() {
       return {
