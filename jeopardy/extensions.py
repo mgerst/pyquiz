@@ -1,10 +1,9 @@
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_assets import Environment
 from flask_socketio import SocketIO
+from flask_webpack import Webpack
 
 
-# init flask assets
-assets_env = Environment()
+webpack = Webpack()
 
 debug_toolbar = DebugToolbarExtension()
 

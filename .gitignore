@@ -93,3 +93,6 @@ ENV/
 
 static/public
 jeopardy/static/public
+
+# Frontend Crap
+node_modules/

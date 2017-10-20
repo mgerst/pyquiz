@@ -6,10 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        {% assets "common_css" %}
-            <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" />
-        {% endassets %}
-
         {% block css %}
         {% endblock %}
     </head>
@@ -17,9 +13,7 @@
         {% block body %}
         {% endblock %}
 
-        {% assets "common_js" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
+        {{ javascript_tag('app') | safe }}
 
         {% block js %}
         {% endblock %}

@@ -44,6 +44,11 @@ def board():
     return render_template('board.html', teams=teams, admin=session.get('admin'))
 
 
+@main.route('/app')
+def app():
+    return render_template('app.html')
+
+
 @main.route('/')
 def index():
     teams = {}
