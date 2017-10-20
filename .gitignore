@@ -96,3 +96,6 @@ jeopardy/static/public
 
 # Frontend Crap
 node_modules/
+
+manifest.dev.json
+manifest.prod.json
