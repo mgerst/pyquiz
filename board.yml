@@ -1,71 +1,198 @@
 ---
+password: cdc
+teams: 4
 boards:
   - order: 1
     name: First Round
     categories:
-      - name: Numbers that Count
+      - name: Crypto
         questions:
-          - clue: The frequency in Hz emitted by the Cap'n Crunch Bosun whistle.
-            answer: 2600
+          - clue: The maximum key size for AES
+            answer: 256
             value: 100
             daily_double: no
             type: text
 
-          - clue: The number of the ISO standard for standardized representation of dates and times (YYYY-MM-DDTHH:MM:SS)
-            answer: 8601
+          - clue: Adi Shamir, Leonard Adleman, and Ron Rivest created this popular cryptosystem
+            answer: RSA
             value: 200
             daily_double: no
             type: text
 
-          - clue: The Ehtertype of IPv4 (hex)
-            answer: 0x0800
+          - clue: 'Guvf jrnx "pvcure" fvzcyl ebgngrf rnpu yrggre ol 13 cynprf va gur nycunorg.'
+            answer: 'ROT13 (This weak "cipher" simply rotates each letter by 13 places in the alphabet.)'
             value: 300
+            daily_double: no
+            type: text
+
+          - clue: The full name (not acronym) of Phil Zimmermann's 1991 email encryption software.
+            answer: Pretty Good Privacy (PGP not accepted)
+            value: 400
             daily_double: yes
             type: text
 
-          - clue: The maximum block size, in bits, for AES
-            answer: Block size is always 128 bits (Keys are 128, 192, 256)
-            value: 400
-            daily_double: no
-            type: text
-
-          - clue: The maximum positive value that can be represented by a signed 32-bit 2-s complement integer, in decimal
-            answer: 2^21 - 1 = 2,147,483,647
+          - clue: The Advanced Encryption Standard, established by NIST, utilizes a subset of this cipher.
+            answer: Rijndael (Not AES)
             value: 500
             daily_double: no
             type: text
 
-      - name: Vulns
+      - name: Named Bugs
         questions:
-          - clue: "Consistently ranking #1 on the OWASP Top 10, SQL is a very common flavor of this vuln."
-            answer: "Injection (\"SQL Injection = FAIL\")"
+          - clue: This 2016 privilege escalation vulnerability affected the copy-on-write handling of the Linux kernel
+            answer:
             value: 100
             daily_double: no
             type: text
 
-          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
-            answer: Cross-Site Scripting (XSS)
+          - clue: This 2014 Bash vulnerability could lead to remote code execution while parsing the environment.
+            answer: Shellshock
             value: 200
-            daily_double: no
+            daily_double: yes
             type: text
 
-          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
-            answer: Cross-Site Scripting (XSS)
+          - clue: The NSA codename for surveillance via unintentional emissions from electronics.
+            answer: TEMPEST
             value: 300
             daily_double: no
             type: text
 
-          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
-            answer: Cross-Site Scripting (XSS)
+          - clue: 'This largely academic attack against Dynamic Random-Access Memory involves repeated writes "leaking" into adjacent rows.'
+            answer: Rowhammer
             value: 400
             daily_double: no
             type: text
 
-          - clue: "Another web favorite, this pervasive vuln allows malicious scripts to execute in a vicim's browser at an otherwise legitimate website."
-            answer: Cross-Site Scripting (XSS)
+          - clue: CVE-2014-0160
+            answer: Heartbleed
             value: 500
             daily_double: no
             type: text
 
-password: changeme
-teams: 4
+      - name: Standardization
+        questions:
+          - clue: RFC 1149, published 1990-04-01, describes this novel high-latency and low-throughput IP encapsulation technique.
+            answer: IP-over-Avian-Carrier
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: This standard defines the proper way to display dates and times (YYYY-MM-DD).
+            answer: ISO 8601
+            value: 200
+            daily_double: no
+            type: text
+
+          - clue: 'RFC 3514 "The Security Flag in the IPv4 Header" defines this previously unused bit in the IPv4 flags.'
+            answer: The Evil Bit
+            value: 300
+            daily_double: no
+            type: text
+
+          - clue: RFC 1918 "Address Allocation for Private Internets" reserves these addresses ranges (list all ranges).
+            answer: 192.168.0.0/16, 172.16.0.0/12, and 10.0.0.0/8
+            value: 400
+            daily_double: yes
+            type: text
+
+          - clue: This standardization body is responsible for the file format most commonly associated with CD-ROM images (Acronym not accepted).
+            answer: International Organization for Standardization
+            value: 500
+            daily_double: no
+            type: text
+
+      - name: "Fucked-Up Vendors"
+        questions:
+          - clue: "This vendor released Field Note: FN 63697, which described how the protective boot on an ethernet cable may inadvertently press a button when inserted."
+            answer: Cisco
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: "Due to numerous violations of the Baseline Requirements, this antivirus vendor and CA can't seem to stay out of the news, especially due to friction with Mozilla."
+            answer: Symantec
+            value: 200
+            daily_double: no
+            type: text
+
+          - clue: "This vendor's Secure Time Seeding feature uses SSL metadata to - often incorrectly - set system time."
+            answer: Microsoft
+            value: 300
+            daily_double: no
+            type: text
+
+          - clue: Though mainly famous for extremely vulnerable client software and shitty browser plugins, this vendor nonetheless suffered a massive password breach in October 2013.
+            answer: Adobe
+            value: 400
+            daily_double: no
+            type: text
+
+          - clue: This certificate authority was distrusted by major browser vendors in mid-October 2016 following an extensive pattern of egregious issues.
+            answer: StartCom and/or WoSign
+            value: 500
+            daily_double: no
+            type: text
+
+      - name: People
+        questions:
+          - clue: "NVidia, FUCK YOU!"
+            answer: Linus Torvalds
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: "\"I'd just like to interject for a moment. What you’re referring to as Linux, is in fact, GNU/Linux, or as I’ve recently taken to calling it, GNU plus Linux.\""
+            answer: Richard Stallman
+            value: 200
+            daily_double: yes
+            type: text
+
+          - clue: Former lead developer of PulseAudio, Avahi, and Zeroconf (as well as current lead of SystemD), nothing good seems to come of this man.
+            answer: Lennart Poettering
+            value: 300
+            daily_double: no
+            type: text
+
+          - clue: The creator of the Debian Linux distribution.
+            answer: Ian Murdoch
+            value: 400
+            daily_double: no
+            type: text
+
+          - clue: The real name of the founder of DEF CON.
+            answer: Jeff Moss (DT/Dark Tangent not accepted).
+            value: 500
+            daily_double: no
+            type: text
+
+      - name: Cons and Meetups
+        questions:
+          - clue: Meeting weekly at Iowa State University, this student organization focuses on information security (Acronym not accepted).
+            answer: Information Assurance Student Group
+            value: 100
+            daily_double: no
+            type: text
+
+          - clue: Meeting every three months, Ames has a chapter of this security organization, better known for its Top Ten.
+            answer: OWASP Ames
+            value: 200
+            daily_double: no
+            type: text
+
+          - clue: The first three letters of this famous hacker conference can be represented by the numbers 333.
+            answer: DEF CON
+            value: 300
+            daily_double: no
+            type: text
+
+          - clue: The Iowa chapter of this free, community-driven security conference will be held Saturday, April 22 in Des Moines.
+            answer: BSides (BSides Iowa)
+            value: 400
+            daily_double: no
+            type: text
+
+          - clue: This local security meetup is held on the third thursday of each month in downtown Des Moines.
+            answer: SecDSM
+            value: 500
+            daily_double: no
+            type: text

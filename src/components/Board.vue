@@ -35,17 +35,24 @@
 
     export default {
         name: 'jeopardy-board',
+        data: function() {
+            return {
+                name: "Loading Board",
+            }
+        },
         computed: {
             ...mapGetters(['categories', 'cells', 'teams', 'isQuestionOpen', 'boardName']),
-            name: function() {
-                return this.boardName;
-            }
         },
         components: {
             JeopardyCell,
             JeopardyDouble,
             JeopardyPrompt,
             JeopardyTeam,
+        },
+        watch: {
+            boardName: function(val) {
+                console.log("New Name", val);
+            }
         }
     }
 </script>

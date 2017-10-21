@@ -18,6 +18,7 @@ new Vue({
         connect: function() {
             this.$socket.emit('whoami');
             this.$socket.emit('board.current');
+            this.$socket.emit('team.list');
         }
     }
 });

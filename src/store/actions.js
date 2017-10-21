@@ -2,6 +2,10 @@ export const socket_youAre = (context, message) => {
     context.commit('setIdentity', message);
 };
 
+export const socket_teamList = (context, data) => {
+    context.commit('setTeamList', {teams: data});
+};
+
 export const socket_boardCurrent = (context, data) => {
     console.log("board.current", data);
 

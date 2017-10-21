@@ -1,6 +1,6 @@
 <template>
   <div class="team" @click="award" @contextmenu="detract" :class="{buzzedin: buzzed}">
-    <h5 class="name">{{ team.name }}</h5>
+    <h5 class="name">{{ identifier }}</h5>
     <span class="score">{{ team.score | score }}</span>
   </div>
 </template>
@@ -15,7 +15,10 @@
       ...mapGetters(['isQuestionOpen', 'openQuestion', 'buzzedTeam']),
       buzzed() {
         return this.team.id === this.buzzedTeam;
-      }
+      },
+      identifier() {
+        return this.team.name === null ? `Team ${this.team.id}` : this.team.name;
+      },
     },
     methods: {
       award(evt) {

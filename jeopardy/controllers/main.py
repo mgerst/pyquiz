@@ -46,6 +46,9 @@ def board():
 
 @main.route('/app')
 def app():
+    if 'team' in session and session['team'] not in bm.teams:
+        session.clear()
+        return redirect('/')
     return render_template('app.html')
 
 
@@ -99,6 +102,19 @@ def admin():
         session['admin'] = True
         session['logged_in'] = True
     return redirect('/board')
+
+
+@socketio.on('team.list')
+def team_list():
+    teams = dict(bm.teams)
+
+    for i in range(1, bm.num_teams+1):
+        if i not in teams:
+            teams[i] = Team(i, None, None)
+
+    emit('team.list', {
+        'teams': [t.as_dict() for t in teams.values()]
+    })
 
 
 @socketio.on('whoami')

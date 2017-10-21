@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <jeopardy-board v-if="activeBoard || !isLoggedIn"></jeopardy-board>
+    <jeopardy-board v-show="activeBoard && isLoggedIn"></jeopardy-board>
   </div>
 </template>
 

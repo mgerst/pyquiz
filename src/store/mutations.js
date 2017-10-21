@@ -76,3 +76,7 @@ export const setBoard = (state, {categories, items, name}) => {
         name
     };
 };
+
+export const setTeamList = (state, {teams}) => {
+    state.teams = teams;
+};
