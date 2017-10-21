@@ -38,7 +38,7 @@ export const modifyScore = (state, {teamId, value}) => {
     state.buzzed = null;
 
     if (value > 0) {
-        this.commit('closeQuestion');
+        closeQuestion(state);
     }
 };
 
@@ -61,4 +61,18 @@ export const setBuzzed = (state) => {
 
 export const clearBuzzed = (state) => {
     state.buzzed = null;
+};
+
+export const setIdentity = (state, {admin, team, logged_in}) => {
+    state.admin = admin;
+    state.currentTeam = team;
+    state.logged_in = logged_in;
+};
+
+export const setBoard = (state, {categories, items, name}) => {
+    state.board = {
+        categories,
+        items,
+        name
+    };
 };

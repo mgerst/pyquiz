@@ -1,8 +1,14 @@
 export const categories = (state) => {
+    if (state.board === null) {
+        return [];
+    }
     return state.board.categories;
-}
+};
 
 export const cells = (state) => {
+    if (state.board === null) {
+        return [];
+    }
     return state.board.items;
 };
 
@@ -36,4 +42,19 @@ export const buzzedTeam = (state) => {
 
 export const currentTeam = (state) => {
     return state.currentTeam;
+};
+
+export const activeBoard = (state) => {
+    return state.board !== null;
+};
+
+export const boardName = (state) => {
+    if (state.board !== null) {
+        return state.board.name;
+    }
+    return "";
+};
+
+export const isLoggedIn = (state) => {
+    return state.logged_in;
 };

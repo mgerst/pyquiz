@@ -1,55 +1,26 @@
 <template>
   <div id="app">
-    <div id="header">
-      <h1 id="board-name" style="color: white;">{{ name }}</h1>
-      <div>&nbsp;</div>
-    </div>
-
-    <table id="game" v-show="!isQuestionOpen">
-      <thead id="category-headers">
-      <tr>
-        <th v-for="cat in categories">{{ cat }}</th>
-      </tr>
-      </thead>
-      <tbody id="questions">
-      <tr v-for="n in 5">
-        <jeopardy-cell v-for="(cat, index) in categories" :item="cells[cat][n - 1]" :key="n + index"></jeopardy-cell>
-      </tr>
-      </tbody>
-    </table>
-
-    <jeopardy-double v-if="isQuestionOpen"></jeopardy-double>
-    <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
-
-    <div id="stats">
-      <jeopardy-team v-for="team in teams" :team="team" :open="true" :prize="200" :key="team.id"></jeopardy-team>
-    </div>
+    <jeopardy-board v-if="activeBoard || !isLoggedIn"></jeopardy-board>
   </div>
 </template>
 
 <script>
-import JeopardyCell from './components/Cell.vue';
-import JeopardyTeam from './components/Team.vue';
-import JeopardyPrompt from './components/Prompt.vue';
-import JeopardyDouble from './components/Double.vue';
+import JeopardyBoard from './components/Board.vue';
 import {mapGetters} from 'vuex';
 
 export default {
   name: 'app',
   data() {
-    return {
-      name: 'Test Board',
-    }
+    return {}
   },
   methods: {
   },
   components: {
-    'jeopardy-cell': JeopardyCell,
-    'jeopardy-team': JeopardyTeam,
-    JeopardyPrompt,
-    JeopardyDouble,
+      JeopardyBoard,
   },
-  computed: mapGetters(['categories', 'cells', 'teams', 'isQuestionOpen'])
+  computed: {
+      ...mapGetters(['activeBoard', 'isLoggedIn']),
+  }
 }
 </script>
 
