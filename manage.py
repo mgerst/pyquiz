@@ -47,5 +47,6 @@ def clear_redis():
     # https://stackoverflow.com/questions/4006324/how-to-atomically-delete-keys-matching-a-pattern-using-redis
     r.eval("return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, "quiz:*")
 
+
 if __name__ == "__main__":
     manager.run()

@@ -17,7 +17,7 @@ boards:
             daily_double: no
             type: text
 
-          - clue: The Ehtertype of IPv4 (hex)
+          - clue: The Ethertype of IPv4 (hex)
             answer: 0x0800
             value: 300
             daily_double: yes

@@ -74,6 +74,7 @@ socket.on('question.open', function (data) {
 });
 
 socket.on('double.open', data => {
+    console.log(data);
     current_question = data;
 
     $("#game").hide();
@@ -94,10 +95,12 @@ socket.on('double.open', data => {
 });
 
 socket.on('double.start', data => {
+    console.log(data);
     highlightTeam(data.team);
     current_question.question = data.question;
     $("#answer").html(data.question);
     $("#answer").css({"display": "block", "visibility": "visible"});
+    $("#buzzer-div").show();
 
     $("#prompt").fadeIn(1000);
     if ($("#correct-response") != null)
@@ -122,6 +125,7 @@ socket.on('team.award', data => {
 });
 
 socket.on('buzzer.opened', function () {
+    $('#reopen').hide();
     $('#team_buzzed').html();
     $('#buzzer').click(buzzer);
     $('#buzzer').css('background-color', '#4caf50');
