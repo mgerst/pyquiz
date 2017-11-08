@@ -1,60 +1,21 @@
-export const categories = (state) => {
-    if (state.board === null) {
-        return [];
-    }
-    return state.board.categories;
+export const gameState = (state) => {
+    return state.state;
 };
 
-export const cells = (state) => {
-    if (state.board === null) {
-        return [];
-    }
-    return state.board.items;
+export const loggedIn = (state) => {
+    return state.logged_in;
 };
 
-export const teams = (state) => {
+export const teamList = (state) => {
     return state.teams;
 };
 
-export const isQuestionOpen = (state) => {
-    return state.question !== null;
-};
-
-export const openQuestion = (state) => {
-    return state.question;
-};
-
-export const isDailyDouble = (state) => {
-    return state.dailydouble.active;
-};
-
-export const hasWager = (state) => {
-    return state.dailydouble.active && state.dailydouble.wager !== null;
-};
-
-export const isAdmin = (state) => {
-    return state.admin;
-};
-
-export const buzzedTeam = (state) => {
-    return state.buzzed;
-};
-
-export const currentTeam = (state) => {
-    return state.currentTeam;
-};
-
-export const activeBoard = (state) => {
-    return state.board !== null;
-};
-
-export const boardName = (state) => {
-    if (state.board !== null) {
-        return state.board.name;
+export const getTeam = (state) => {
+    return (id) => {
+        if (state.teams !== null) {
+            return state.teams.find(team => team.id === id);
+        } else {
+            return null;
+        }
     }
-    return "";
-};
-
-export const isLoggedIn = (state) => {
-    return state.logged_in;
 };

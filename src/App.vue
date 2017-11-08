@@ -1,209 +1,211 @@
 <template>
-  <div id="app">
-    <jeopardy-board v-show="activeBoard && isLoggedIn"></jeopardy-board>
-  </div>
+    <div id="app">
+        <team-picker v-if="!loggedIn"></team-picker>
+    </div>
 </template>
 
 <script>
-import JeopardyBoard from './components/Board.vue';
-import {mapGetters} from 'vuex';
+    import {mapGetters} from 'vuex';
+    import TeamPicker from './components/TeamPicker.vue';
 
-export default {
-  name: 'app',
-  data() {
-    return {}
-  },
-  methods: {
-  },
-  components: {
-      JeopardyBoard,
-  },
-  computed: {
-      ...mapGetters(['activeBoard', 'isLoggedIn']),
-  }
-}
+    export default {
+        name: 'app',
+        data() {
+            return {}
+        },
+        methods: {
+        },
+        components: {
+            TeamPicker,
+        },
+        computed: {
+            ...mapGetters(['loggedIn']),
+        },
+    }
 </script>
 
 <style>
-   body {
-  background-color: #2a3698;
-  height: 100%;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  padding-bottom: 100px;
-}
+    body {
+        background-color: #2a3698;
+        height: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        padding-bottom: 100px;
+    }
 
-label {
-  display: block;
-  font-size: 16px;
-}
+    label {
+        display: block;
+        font-size: 16px;
+    }
 
-input, textarea, select {
-  display: block;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  margin: auto;
-}
+    input, textarea, select {
+        display: block;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        margin: auto;
+    }
 
-#board-name {
-  color: white;
-}
+    #board-name {
+        color: white;
+    }
 
-textarea {
-  padding: 5px;
-}
-.clear {
-  clear: both;
-}
-.hide {
-  display: none;
-}
+    textarea {
+        padding: 5px;
+    }
 
-#game {
-  width: 100%;
-  background-color: #000000;
-  padding: 0;
-  margin: 0;
-  margin: auto;
-  font-size: 16px;
-}
+    .clear {
+        clear: both;
+    }
 
-#game textarea {
-  width: 90%;
-  height: 30px;
-  font-size: 18px;
-  line-height: 22px;
-}
+    .hide {
+        display: none;
+    }
 
-#game h3 {
-  color: #ffff5f;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-}
+    #game {
+        width: 100%;
+        background-color: #000000;
+        padding: 0;
+        margin: 0;
+        margin: auto;
+        font-size: 16px;
+    }
 
-#game tbody td, #game thead th {
-  vertical-align: middle;
-  background-color: #2a3698;
-  padding: 5px;
-  text-align: center;
-  width: 16%;
-  color: #ffff5f;
-  height: 60px;
-  font-size: 20px;
+    #game textarea {
+        width: 90%;
+        height: 30px;
+        font-size: 18px;
+        line-height: 22px;
+    }
 
-}
+    #game h3 {
+        color: #ffff5f;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
 
-#game tbody td {
-  cursor: pointer;
-  height: 100px;
-  border: 3px solid #2a3698;
-}
+    #game tbody td, #game thead th {
+        vertical-align: middle;
+        background-color: #2a3698;
+        padding: 5px;
+        text-align: center;
+        width: 16%;
+        color: #ffff5f;
+        height: 60px;
+        font-size: 20px;
 
-#game tbody td:hover {
-  border: 3px solid #ffff5f;
-}
+    }
 
-#game tbody td.dirty h3 {
-  color: #2a3698;
-}
+    #game tbody td {
+        cursor: pointer;
+        height: 100px;
+        border: 3px solid #2a3698;
+    }
 
-#game tfoot td {
-  text-align: center;
-  background-color: #2a3698;
-}
+    #game tbody td:hover {
+        border: 3px solid #ffff5f;
+    }
 
-h1 {
-  color: white;
-}
+    #game tbody td.dirty h3 {
+        color: #2a3698;
+    }
 
-#prompt, #dailydouble {
-  height: 100%;
-  width: 100%;
-  background-color: #2a3698;
-  color: #FFFFFF;
-  text-align: center;
-  margin-top: 60px;
-}
+    #game tfoot td {
+        text-align: center;
+        background-color: #2a3698;
+    }
 
-#prompt a:link, #prompt a:visited, #prompt a:hover {
-  color: #fff;
-  font-size: 18px;
-  text-decoration: underline;
-}
+    h1 {
+        color: white;
+    }
 
-#prompt a:hover {
-  text-decoration: none;
-}
+    #prompt, #dailydouble {
+        height: 100%;
+        width: 100%;
+        background-color: #2a3698;
+        color: #FFFFFF;
+        text-align: center;
+        margin-top: 60px;
+    }
 
-#answer {
-  padding-left:5%;
-  padding-right:5%;
-}
+    #prompt a:link, #prompt a:visited, #prompt a:hover {
+        color: #fff;
+        font-size: 18px;
+        text-decoration: underline;
+    }
 
-#question {
-  padding-left:5%;
-  padding-right:5%;
-}
+    #prompt a:hover {
+        text-decoration: none;
+    }
 
-button {
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 32px;
-  background-color: cornflowerblue;
-}
+    #answer {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 
-#buzzer, #reopen {
-  background-color: red;
-}
+    #question {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 
-#correct-response {
-  background-color: green;
-}
+    button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 32px;
+        background-color: cornflowerblue;
+    }
 
-#continue {
-  background-color: cornflowerblue;
-}
+    #buzzer, #reopen {
+        background-color: red;
+    }
 
-#board-name {
-  float: left;
-}
+    #correct-response {
+        background-color: green;
+    }
 
-#next_board {
-  background-color: cornflowerblue;
-  padding: 10px 28px;
-  display: inline;
-  /*float: right;*/
-  margin-left: 10px;
-}
+    #continue {
+        background-color: cornflowerblue;
+    }
 
-#stats {
-  position: fixed;
-  bottom: 0;
-  background-color: #ffffff;
-  width: 100%;
-  text-align: center;
-  height: 110px;
-  display: flex;
-  left: 0;
-}
+    #board-name {
+        float: left;
+    }
 
-#stats .team {
-  flex-grow: 1;
-  margin: 10px;
-}
+    #next_board {
+        background-color: cornflowerblue;
+        padding: 10px 28px;
+        display: inline;
+        /*float: right;*/
+        margin-left: 10px;
+    }
 
-.buzzedin {
-  border: 1px solid green;
-}
+    #stats {
+        position: fixed;
+        bottom: 0;
+        background-color: #ffffff;
+        width: 100%;
+        text-align: center;
+        height: 110px;
+        display: flex;
+        left: 0;
+    }
 
-.team h5, .team span {
-  pointer-events: none;
-}
+    #stats .team {
+        flex-grow: 1;
+        margin: 10px;
+    }
 
-a {
-  color: white;
-}
+    .buzzedin {
+        border: 1px solid green;
+    }
+
+    .team h5, .team span {
+        pointer-events: none;
+    }
+
+    a {
+        color: white;
+    }
 </style>

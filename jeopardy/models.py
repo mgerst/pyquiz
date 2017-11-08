@@ -135,6 +135,10 @@ class Board(object):
 
 
 class BoardManager(object):
+    STATE_WAITING = 'waiting'
+    STATE_PLAYING = 'playing'
+    STATE_FINISHED = 'finished'
+
     def __init__(self):
         self.boards = OrderedDict()
         self.board_iter = None
@@ -145,6 +149,7 @@ class BoardManager(object):
         self.num_teams = None
         self.buzzer = None
         self._redis = None
+        self.state = BoardManager.STATE_WAITING
 
     def claim_team(self, name: str, id: int, key: str, redis: StrictRedis):
         team = Team(id, name, key)
