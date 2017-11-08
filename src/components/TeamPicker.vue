@@ -5,8 +5,7 @@
 
             <div class="player-choice" v-for="team in teamList" :key="team.id">
                 <div class="player-select" @click="selectTeam(team.id)">
-                    <template v-if="team.taken">{{ team.name }}</template>
-                    <template v-else>Team {{ team.id }}</template>
+                    {{ team | teamName }}
                 </div>
             </div>
 
