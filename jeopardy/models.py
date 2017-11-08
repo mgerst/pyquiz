@@ -142,7 +142,10 @@ class Board(object):
     def shape(self):
         width = len(self.categories)
         height = max(len(c.items) for c in self.categories)
-        return width, height
+        return {
+            'width': width,
+            'height': height,
+        }
 
 
 class BoardManager(object):

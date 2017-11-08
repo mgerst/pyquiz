@@ -17,3 +17,7 @@ export const teamJoin = (state, {team, name}) => {
     found_team.taken = true;
     found_team.name = name;
 };
+
+export const boardCurrent = (state, data) => {
+    state.board = data;
+};

@@ -23,3 +23,7 @@ export const getTeam = (state) => {
         }
     }
 };
+
+export const currentBoard = (state) => {
+    return state.board;
+};

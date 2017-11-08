@@ -109,3 +109,8 @@ def game_start():
         'type': board.type,
     }, broadcast=True)
     send_board_current(bm)
+
+
+@socketio.on('board.current')
+def board_current():
+    send_board_current(bm)

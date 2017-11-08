@@ -4,6 +4,8 @@
         <team-picker v-if="!loggedIn"></team-picker>
         <waiting-room v-if="loggedIn && !isAdmin"></waiting-room>
 
+        <jeopardy-board v-if="gameState === 'playing'"></jeopardy-board>
+
         <div id="stats">
             <jeopardy-team v-for="team in teamList" :key="team.id" :team="team"></jeopardy-team>
         </div>
@@ -13,6 +15,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import AdminBar from './components/AdminBar.vue';
+    import Board from './components/Board.vue';
     import TeamPicker from './components/TeamPicker.vue';
     import TeamScore from './components/Team.vue';
     import WaitingRoom from './components/WaitingRoom.vue';
@@ -26,12 +29,13 @@
         },
         components: {
             AdminBar,
+            'jeopardy-board': Board,
             TeamPicker,
             'jeopardy-team': TeamScore,
             WaitingRoom,
         },
         computed: {
-            ...mapGetters(['loggedIn', 'isAdmin', 'teamList']),
+            ...mapGetters(['loggedIn', 'isAdmin', 'teamList', 'gameState']),
         },
     }
 </script>

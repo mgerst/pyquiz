@@ -15,9 +15,11 @@ export const socket_teamJoined = (context, data) => {
 };
 
 export const socket_boardSwitch = (context, data) => {
+    // TODO: Actually handle board types. This event doesn't currently do anything
     console.log("Switching board", data);
 };
 
 export const socket_boardCurrent = (context, data) => {
     console.log("Current board", data);
+    context.commit('boardCurrent', data);
 };

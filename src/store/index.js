@@ -12,6 +12,7 @@ const state = {
     team: null,
     logged_in: false,
     teams: null,
+    board: null,
 };
 
 const store = new Vuex.Store({
