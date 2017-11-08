@@ -59,4 +59,25 @@ def whoami():
 
 @socketio.on('team.join')
 def team_join(data):
-    pass
+    team_id = data['id']
+
+    if bm.team_exists(team_id):
+        if bm.validate_team(team_id, data['password']):
+            session['team'] = team_id
+            session['logged_in'] = True
+            session.modified = True
+
+            send_identity()
+            emit('team.joined', {
+                'team': team_id,
+                'name': bm.teams[team_id].name,
+            }, broadcast=True)
+        else:
+            emit('error', {
+                'error': 'Invalid team or re-join password',
+            })
+    else:
+        session['team'] = team_id
+        session['logged_in'] = True
+        session.modified = True
+        bm.claim_team(data['name'], team_id, data['password'], redis)

@@ -161,8 +161,6 @@ class BoardManager(object):
             self.persist(redis)
         print("persisted")
 
-        socketio.emit('team.taken', {'id': id, 'name': name})
-
     def team_exists(self, id):
         return id in self.teams
 

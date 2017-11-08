@@ -9,3 +9,7 @@ export const socket_gameState = (context, {state}) => {
 export const socket_teamList = (context, {teams}) => {
     context.commit('setTeams', teams);
 };
+
+export const socket_teamJoined = (context, data) => {
+    context.commit('teamJoin', data);
+};

@@ -11,3 +11,9 @@ export const setState = (state, gameState) => {
 export const setTeams = (state, teams) => {
     state.teams = teams;
 };
+
+export const teamJoin = (state, {team, name}) => {
+    let found_team = state.teams.find(t => team === t.id)
+    found_team.taken = true;
+    found_team.name = name;
+};

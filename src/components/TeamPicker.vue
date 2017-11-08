@@ -16,15 +16,15 @@
         </template>
 
         <template v-if="currentTeam != null && currentTeam.taken">
-            <form>
+            <form @submit.prevent="rejoin">
                 <label for="key">Rejoin Key:</label>
                 <input type="text" v-model="key"><br /><br />
-                <button type="button">Rejoin</button>
+                <button type="button" @click="rejoin">Rejoin</button>
             </form>
         </template>
 
         <template v-if="currentTeam != null && !currentTeam.taken">
-            <form>
+            <form @submit.prevent="join">
                 <label for="name">Team Name:</label>
                 <input type="text" v-model="name" />
                 <label for="key">Key:</label>
@@ -62,6 +62,12 @@
                     id: this.selectedTeam,
                     password: this.key,
                     name: this.name,
+                });
+            },
+            rejoin() {
+                this.$socket.emit('team.join', {
+                    id: this.selectedTeam,
+                    password: this.key,
                 });
             },
         }
