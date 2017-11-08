@@ -27,3 +27,9 @@ export const getTeam = (state) => {
 export const currentBoard = (state) => {
     return state.board;
 };
+
+export const getQuestion = (state) => {
+    return (category, question) => {
+        return state.board.categories[category].questions[question];
+    };
+};

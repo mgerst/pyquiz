@@ -11,8 +11,8 @@
             </tr>
             </thead>
             <tbody id="questions">
-            <tr v-for="category in height">
-                <td v-for="question in width">{{ category }} - {{ question }}</td>
+            <tr v-for="question in height">
+                <jeopardy-cell v-for="category in width" :key="String(category - 1) + '-' + String(width - 1)" :category="category - 1" :question="question - 1"></jeopardy-cell>
             </tr>
             </tbody>
         </table>
@@ -21,9 +21,13 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import JeopardyCell from './JeopardyCell.vue';
 
     export default {
         name: 'jeopardy-board',
+        components: {
+            JeopardyCell,
+        },
         computed: {
             ...mapGetters(['currentBoard']),
             name() {

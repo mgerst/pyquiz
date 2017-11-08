@@ -4,7 +4,7 @@
         <team-picker v-if="!loggedIn"></team-picker>
         <waiting-room v-if="loggedIn && !isAdmin"></waiting-room>
 
-        <jeopardy-board v-if="gameState === 'playing'"></jeopardy-board>
+        <jeopardy-board v-if="gameState === 'playing' && loggedIn"></jeopardy-board>
 
         <div id="stats">
             <jeopardy-team v-for="team in teamList" :key="team.id" :team="team"></jeopardy-team>

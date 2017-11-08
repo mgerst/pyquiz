@@ -83,6 +83,9 @@ def team_join(data):
         session.modified = True
         bm.claim_team(data['name'], team_id, data['password'], redis)
 
+    if bm.state == BoardManager.STATE_PLAYING:
+        send_board_current(bm)
+
 
 @socketio.on('admin.login')
 def admin_login(data):
