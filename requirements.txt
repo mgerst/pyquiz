@@ -5,6 +5,7 @@ Flask-Webpack==0.1
 Flask-DebugToolbar==0.10.1
 Flask-Script==2.0.5
 Flask-Socketio==2.8.4
+Flask-Session==0.3.1
 
 # Other
 cssmin==0.2.0

@@ -8,6 +8,7 @@ from jeopardy.controllers.main import main
 from jeopardy.extensions import (
     webpack,
     debug_toolbar,
+    session,
     socketio
 )
 from jeopardy.models import BoardManager
@@ -42,7 +43,7 @@ def create_app(object_name):
 
     # Import and register the different asset bundles
     webpack.init_app(app)
-
+    session.init_app(app)
     socketio.init_app(app)
 
     # register out blueprints

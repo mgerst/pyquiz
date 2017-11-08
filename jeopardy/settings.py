@@ -1,6 +1,11 @@
+import redis
+
+
 class Config(object):
     SECRET_KEY = 'REPLACE_ME'
     ADMIN_PW = 'REPLACE_ME'
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.StrictRedis(host='localhost', db=2)
 
 
 class ProdConfig(Config):
