@@ -31,3 +31,7 @@ def send_identity():
         'team': session.get('team', None),
         'logged_in': session.get('logged_in', False),
     })
+
+
+def send_board_current(bm: BoardManager):
+    emit('board.current', bm.current.as_dict(), broadcast=True)

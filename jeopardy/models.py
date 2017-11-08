@@ -100,10 +100,14 @@ class Category(object):
 class Board(object):
     nextid = 1
 
-    def __init__(self, id, name):
+    TYPE_STANDARD = 'standard'
+    TYPE_FINAL = 'final'
+
+    def __init__(self, id, name, type=TYPE_STANDARD):
         self.categories = []
         self.id = id
         self.name = name
+        self.type = type
 
     def add_category(self, name):
         ct = Category(self.nextid, name)
@@ -127,11 +131,18 @@ class Board(object):
             'id': self.id,
             'name': self.name,
             'categories': [cat.as_dict() for cat in self.categories],
+            'shape': self.shape,
         }
 
     def load(self, r: StrictRedis):
         for category in self.categories:
             category.load(r)
+
+    @property
+    def shape(self):
+        width = len(self.categories)
+        height = max(len(c.items) for c in self.categories)
+        return width, height
 
 
 class BoardManager(object):

@@ -3,6 +3,10 @@
         <admin-bar v-if="isAdmin"></admin-bar>
         <team-picker v-if="!loggedIn"></team-picker>
         <waiting-room v-if="loggedIn && !isAdmin"></waiting-room>
+
+        <div id="stats">
+            <jeopardy-team v-for="team in teamList" :key="team.id" :team="team"></jeopardy-team>
+        </div>
     </div>
 </template>
 
@@ -10,6 +14,7 @@
     import {mapGetters} from 'vuex';
     import AdminBar from './components/AdminBar.vue';
     import TeamPicker from './components/TeamPicker.vue';
+    import TeamScore from './components/Team.vue';
     import WaitingRoom from './components/WaitingRoom.vue';
 
     export default {
@@ -22,10 +27,11 @@
         components: {
             AdminBar,
             TeamPicker,
+            'jeopardy-team': TeamScore,
             WaitingRoom,
         },
         computed: {
-            ...mapGetters(['loggedIn', 'isAdmin']),
+            ...mapGetters(['loggedIn', 'isAdmin', 'teamList']),
         },
     }
 </script>

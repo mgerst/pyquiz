@@ -8,7 +8,7 @@ from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager, Team
 from jeopardy.utils import team_required, admin_required
 
-from .utils import get_team_list, send_identity
+from .utils import get_team_list, send_identity, send_board_current
 
 bm = None  # type: BoardManager
 redis = None  # type: StrictRedis
@@ -101,3 +101,11 @@ def admin_login(data):
 def game_start():
     bm.state = BoardManager.STATE_PLAYING
     emit('game.state', {'state': bm.state}, broadcast=True)
+
+    board = bm.current
+    emit('board.switch', {
+        'id': board.id,
+        'name': board.name,
+        'type': board.type,
+    }, broadcast=True)
+    send_board_current(bm)

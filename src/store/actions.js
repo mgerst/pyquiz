@@ -13,3 +13,11 @@ export const socket_teamList = (context, {teams}) => {
 export const socket_teamJoined = (context, data) => {
     context.commit('teamJoin', data);
 };
+
+export const socket_boardSwitch = (context, data) => {
+    console.log("Switching board", data);
+};
+
+export const socket_boardCurrent = (context, data) => {
+    console.log("Current board", data);
+};
