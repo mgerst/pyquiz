@@ -87,6 +87,15 @@ def team_join(data):
         send_board_current(bm)
 
 
+@socketio.on('team.buzz')
+@team_required
+def team_buzz():
+    if not bm.buzzer:
+        bm.buzzer = True
+        team = session.get('team')
+        emit('buzzer.close', {'team': team}, broadcast=True)
+
+
 @socketio.on('admin.login')
 def admin_login(data):
     password = data['password']
@@ -101,6 +110,7 @@ def admin_login(data):
 
 
 @socketio.on('game.start')
+@admin_required
 def game_start():
     bm.state = BoardManager.STATE_PLAYING
     emit('game.state', {'state': bm.state}, broadcast=True)
@@ -120,6 +130,7 @@ def board_current():
 
 
 @socketio.on('question.open')
+@admin_required
 def question_open(data):
     question_id = data['question']
     category_id = data['category']
@@ -129,8 +140,16 @@ def question_open(data):
     bm.current_question = question
 
     ret = {
-        'clue': question.answer,
+        'clue': question.question,
         'question': question_id,
         'category': category_id,
     }
     emit('question.open', ret, broadcast=True)
+
+
+@socketio.on('buzzer.open')
+@admin_required
+def buzzer_open():
+    bm.buzzer = False
+    emit('buzzer.open', broadcast=True)
+

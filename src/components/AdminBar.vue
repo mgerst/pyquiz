@@ -2,6 +2,7 @@
     <div class="admin-bar">
         <button @click="startGame" v-if="isWaiting">Start</button>
         <button v-if="isPlaying">Next Board</button>
+        <button v-if="isQuestionOpen && !buzzerOpen" id="reopen" @click="openBuzzer">Open Buzzer</button>
     </div>
 </template>
 
@@ -11,7 +12,7 @@
     export default {
         name: 'admin-bar',
         computed: {
-            ...mapGetters(['gameState']),
+            ...mapGetters(['gameState', 'isQuestionOpen', 'buzzerOpen']),
             isWaiting() {
                 return this.gameState === 'waiting';
             },
@@ -25,6 +26,9 @@
         methods: {
             startGame() {
                 this.$socket.emit('game.start');
+            },
+            openBuzzer() {
+                this.$socket.emit('buzzer.open');
             }
         }
     }

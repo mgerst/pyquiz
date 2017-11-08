@@ -26,3 +26,7 @@ export const socket_boardCurrent = (context, data) => {
 export const socket_questionOpen = (context, data) => {
     context.commit('questionOpen', data);
 };
+
+export const socket_buzzerOpen = (context) => {
+    context.commit('buzzerOpen');
+};

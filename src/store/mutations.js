@@ -29,3 +29,7 @@ export const questionOpen = (state, {question, category, clue}) => {
         clue: clue,
     };
 };
+
+export const buzzerOpen = (state) => {
+    state.buzzer = true;
+};

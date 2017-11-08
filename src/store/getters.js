@@ -47,3 +47,7 @@ export const openQuestion = (state) => {
 export const isQuestionOpen = (state) => {
     return state.currentQuestion !== null;
 };
+
+export const buzzerOpen = (state) => {
+    return state.buzzer;
+};
