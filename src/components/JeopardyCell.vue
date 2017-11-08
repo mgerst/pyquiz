@@ -1,5 +1,5 @@
 <template>
-    <td>
+    <td @click="open">
         <span v-show="current.visible">{{ value }}</span>
     </td>
 </template>
@@ -11,7 +11,7 @@
         name: 'jeopardy-cell',
         props: ['category', 'question'],
         computed: {
-            ...mapGetters(['getQuestion']),
+            ...mapGetters(['getQuestion', 'isAdmin']),
             current() {
                 return this.getQuestion(this.category, this.question);
             },
@@ -21,6 +21,18 @@
                 }
                 return null;
             },
+        },
+        methods: {
+            open() {
+                if (this.isAdmin) {
+                    this.$socket.emit('question.open', {
+                        question: this.question,
+                        category: this.category,
+                    })
+                } else {
+                    console.log("Can't open question as non-admin");
+                }
+            }
         }
     }
 </script>

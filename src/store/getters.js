@@ -29,7 +29,21 @@ export const currentBoard = (state) => {
 };
 
 export const getQuestion = (state) => {
-    return (category, question) => {
-        return state.board.categories[category].questions[question];
+    return (cat_id, ques_id) => {
+        let category = state.board.categories.find(cat => cat.id === cat_id);
+        if (!category) {
+            return null;
+        }
+
+        let question = category.questions.find(ques => ques.id === ques_id);
+        return question;
     };
+};
+
+export const openQuestion = (state) => {
+    return state.currentQuestion;
+};
+
+export const isQuestionOpen = (state) => {
+    return state.currentQuestion !== null;
 };

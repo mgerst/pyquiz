@@ -1,10 +1,10 @@
 <template>
     <div id="app" v-if="currentBoard">
-        <div id="header">
+        <div id="header" v-if="!isQuestionOpen">
             <h1 id="board-name">{{ name }}</h1>
         </div>
 
-        <table id="game">
+        <table id="game" v-if="!isQuestionOpen">
             <thead id="category-headers">
             <tr>
                 <th v-for="cat in categories" :key="cat.id">{{ cat.name }}</th>
@@ -12,24 +12,28 @@
             </thead>
             <tbody id="questions">
             <tr v-for="question in height">
-                <jeopardy-cell v-for="category in width" :key="String(category - 1) + '-' + String(width - 1)" :category="category - 1" :question="question - 1"></jeopardy-cell>
+                <jeopardy-cell v-for="category in width" :key="String(category - 1) + '-' + String(width - 1)" :category="category" :question="question"></jeopardy-cell>
             </tr>
             </tbody>
         </table>
+
+        <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
     import JeopardyCell from './JeopardyCell.vue';
+    import JeopardyPrompt from './Prompt.vue';
 
     export default {
         name: 'jeopardy-board',
         components: {
             JeopardyCell,
+            JeopardyPrompt,
         },
         computed: {
-            ...mapGetters(['currentBoard']),
+            ...mapGetters(['currentBoard', 'isQuestionOpen']),
             name() {
                 if (this.currentBoard) {
                     return this.currentBoard.name;

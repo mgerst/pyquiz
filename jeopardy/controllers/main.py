@@ -117,3 +117,20 @@ def game_start():
 @socketio.on('board.current')
 def board_current():
     send_board_current(bm)
+
+
+@socketio.on('question.open')
+def question_open(data):
+    question_id = data['question']
+    category_id = data['category']
+
+    category = bm.current.get_category(category_id)
+    question = category.get_question(question_id)
+    bm.current_question = question
+
+    ret = {
+        'clue': question.answer,
+        'question': question_id,
+        'category': category_id,
+    }
+    emit('question.open', ret, broadcast=True)

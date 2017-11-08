@@ -21,3 +21,11 @@ export const teamJoin = (state, {team, name}) => {
 export const boardCurrent = (state, data) => {
     state.board = data;
 };
+
+export const questionOpen = (state, {question, category, clue}) => {
+    state.currentQuestion = {
+        id: question,
+        category: category,
+        clue: clue,
+    };
+};

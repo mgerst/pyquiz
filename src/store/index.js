@@ -13,6 +13,7 @@ const state = {
     logged_in: false,
     teams: null,
     board: null,
+    currentQuestion: null,
 };
 
 const store = new Vuex.Store({

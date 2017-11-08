@@ -40,7 +40,7 @@ boards:
       - name: Named Bugs
         questions:
           - clue: This 2016 privilege escalation vulnerability affected the copy-on-write handling of the Linux kernel
-            answer:
+            answer: DirtyCOW
             value: 100
             daily_double: no
             type: text

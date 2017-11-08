@@ -20,6 +20,9 @@ export const socket_boardSwitch = (context, data) => {
 };
 
 export const socket_boardCurrent = (context, data) => {
-    console.log("Current board", data);
     context.commit('boardCurrent', data);
+};
+
+export const socket_questionOpen = (context, data) => {
+    context.commit('questionOpen', data);
 };
