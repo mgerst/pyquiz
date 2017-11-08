@@ -1,12 +1,14 @@
 <template>
     <div id="app">
+        <admin-bar v-if="isAdmin"></admin-bar>
         <team-picker v-if="!loggedIn"></team-picker>
-        <waiting-room v-if="loggedIn"></waiting-room>
+        <waiting-room v-if="loggedIn && !isAdmin"></waiting-room>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
+    import AdminBar from './components/AdminBar.vue';
     import TeamPicker from './components/TeamPicker.vue';
     import WaitingRoom from './components/WaitingRoom.vue';
 
@@ -18,11 +20,12 @@
         methods: {
         },
         components: {
+            AdminBar,
             TeamPicker,
             WaitingRoom,
         },
         computed: {
-            ...mapGetters(['loggedIn']),
+            ...mapGetters(['loggedIn', 'isAdmin']),
         },
     }
 </script>
@@ -33,6 +36,8 @@
         height: 100%;
         font-family: Verdana, Arial, Helvetica, sans-serif;
         padding-bottom: 100px;
+        padding-left: 40px;
+        padding-right: 40px;
     }
 
     label {

@@ -16,9 +16,8 @@
         {% block body %}
         {% endblock %}
 
-        {{ javascript_tag('app') | safe }}
-
         {% block js %}
         {% endblock %}
+        {{ javascript_tag('app') | safe }}
     </body>
 </html>

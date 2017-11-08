@@ -2,7 +2,6 @@
 import redis
 from flask import Flask
 
-from jeopardy import assets
 from jeopardy.controllers.main import main
 
 from jeopardy.extensions import (

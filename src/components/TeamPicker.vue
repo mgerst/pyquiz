@@ -1,11 +1,17 @@
 <template>
     <div class="team-picker">
-        <template v-if="selectedTeam == null">
+        <template v-if="selectedTeam === null">
             <h1>Team Picker</h1>
 
             <div class="player-choice" v-for="team in teamList" :key="team.id">
                 <div class="player-select" @click="selectTeam(team.id)">
                     {{ team | teamName }}
+                </div>
+            </div>
+
+            <div class="player-choice" v-if="showAdmin">
+                <div class="player-select" @click="loginAdmin">
+                    Admin
                 </div>
             </div>
 
@@ -17,18 +23,26 @@
         <template v-if="currentTeam != null && currentTeam.taken">
             <form @submit.prevent="rejoin">
                 <label for="key">Rejoin Key:</label>
-                <input type="text" v-model="key"><br /><br />
-                <button type="button" @click="rejoin">Rejoin</button>
+                <input type="password" v-model="key"><br /><br />
+                <button type="submit" @click="rejoin">Rejoin</button>
             </form>
         </template>
 
         <template v-if="currentTeam != null && !currentTeam.taken">
             <form @submit.prevent="join">
                 <label for="name">Team Name:</label>
-                <input type="text" v-model="name" />
+                <input type="text" id="name" v-model="name" />
                 <label for="key">Key:</label>
-                <input type="text" v-model="key" />
-                <button type="button" @click="join">Join</button>
+                <input type="text" id="key" v-model="key" />
+                <button type="submit" @click="join">Join</button>
+            </form>
+        </template>
+
+        <template v-if="adminLogin">
+            <form @submit.prevent="adminJoin">
+                <label for="password">Password:</label>
+                <input type="password" id="password" v-model="key" />
+                <button type="submit" @click="adminJoin">Login</button>
             </form>
         </template>
     </div>
@@ -42,6 +56,7 @@
         data() {
             return {
                 selectedTeam: null,
+                adminLogin: false,
                 key: null,
                 name: null,
             }
@@ -50,7 +65,10 @@
             ...mapGetters(['teamList', 'getTeam']),
             currentTeam() {
                 return this.getTeam(this.selectedTeam);
-            }
+            },
+            showAdmin() {
+                return window.jeopardy.admin;
+            },
         },
         methods: {
             selectTeam(id) {
@@ -68,6 +86,15 @@
                     id: this.selectedTeam,
                     password: this.key,
                 });
+            },
+            adminJoin() {
+                this.$socket.emit('admin.login', {
+                    password: this.key,
+                });
+            },
+            loginAdmin() {
+                this.adminLogin = true;
+                this.selectedTeam = true;
             },
         }
     }

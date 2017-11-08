@@ -6,6 +6,10 @@ export const loggedIn = (state) => {
     return state.logged_in;
 };
 
+export const isAdmin = (state) => {
+    return state.admin;
+};
+
 export const teamList = (state) => {
     return state.teams;
 };

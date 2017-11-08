@@ -34,7 +34,8 @@ main = MainBlueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('app.html')
+    admin = 'true' if 'admin' in request.args else 'false'
+    return render_template('app.html', admin=admin)
 
 
 @main.route('/session/clear')
@@ -81,3 +82,22 @@ def team_join(data):
         session['logged_in'] = True
         session.modified = True
         bm.claim_team(data['name'], team_id, data['password'], redis)
+
+
+@socketio.on('admin.login')
+def admin_login(data):
+    password = data['password']
+
+    if bm.validate_admin(password):
+        session['admin'] = True
+        session['logged_in'] = True
+        session.modified = True
+        send_identity()
+    else:
+        emit('error', {'error': 'Invalid admin login'})
+
+
+@socketio.on('game.start')
+def game_start():
+    bm.state = BoardManager.STATE_PLAYING
+    emit('game.state', {'state': bm.state}, broadcast=True)
