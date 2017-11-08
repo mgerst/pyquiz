@@ -1,12 +1,14 @@
 <template>
     <div id="app">
         <team-picker v-if="!loggedIn"></team-picker>
+        <waiting-room v-if="loggedIn"></waiting-room>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
     import TeamPicker from './components/TeamPicker.vue';
+    import WaitingRoom from './components/WaitingRoom.vue';
 
     export default {
         name: 'app',
@@ -17,6 +19,7 @@
         },
         components: {
             TeamPicker,
+            WaitingRoom,
         },
         computed: {
             ...mapGetters(['loggedIn']),
