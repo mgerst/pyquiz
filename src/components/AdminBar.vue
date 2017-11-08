@@ -1,8 +1,10 @@
 <template>
     <div class="admin-bar">
         <button @click="startGame" v-if="isWaiting">Start</button>
-        <button v-if="isPlaying">Next Board</button>
-        <button v-if="isQuestionOpen && !buzzerOpen" id="reopen" @click="openBuzzer">Open Buzzer</button>
+        <button v-if="isPlaying && !isQuestionOpen">Next Board</button>
+        <button v-if="isPlaying && isQuestionOpen && !buzzerOpen && !questionRevealed" id="reopen" @click="openBuzzer">Open Buzzer</button>
+        <button v-if="isPlaying && isQuestionOpen && !questionRevealed" id="correct-response" @click="reveal">Reveal</button>
+        <button v-if="isPlaying && isQuestionOpen" id="back" @click="closeQuestion">Close</button>
     </div>
 </template>
 
@@ -12,7 +14,7 @@
     export default {
         name: 'admin-bar',
         computed: {
-            ...mapGetters(['gameState', 'isQuestionOpen', 'buzzerOpen']),
+            ...mapGetters(['gameState', 'isQuestionOpen', 'buzzerOpen', 'questionRevealed']),
             isWaiting() {
                 return this.gameState === 'waiting';
             },
@@ -29,6 +31,12 @@
             },
             openBuzzer() {
                 this.$socket.emit('buzzer.open');
+            },
+            reveal() {
+                this.$socket.emit('question.reveal');
+            },
+            closeQuestion() {
+                this.$socket.emit('question.close');
             }
         }
     }

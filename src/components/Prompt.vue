@@ -6,6 +6,8 @@
             <button type="button" id="buzzer" @click="buzz" @keyup="buzz">Buzzer</button>
             <p>(or press the any key)</p>
         </div>
+
+        <h1 id="question" v-if="questionRevealed">{{ answer }}</h1>
     </div>
 </template>
 
@@ -15,12 +17,18 @@
     export default {
         name: 'jeopardy-prompt',
         computed: {
-            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin']),
+            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed']),
+            answer() {
+                if (this.openQuestion) {
+                    return this.openQuestion.answer;
+                }
+                return "";
+            }
         },
         methods: {
             buzz() {
                 this.$socket.emit('team.buzz');
-            }
+            },
         }
     };
 </script>

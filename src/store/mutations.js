@@ -28,7 +28,12 @@ export const questionOpen = (state, {question, category, clue, value}) => {
         category: category,
         clue: clue,
         value: value,
+        answer: null,
     };
+};
+
+export const questionReveal = (state, {answer}) => {
+    state.currentQuestion.answer = answer;
 };
 
 export const buzzerOpen = (state) => {
@@ -39,4 +44,23 @@ export const buzzerOpen = (state) => {
 export const buzzerClose = (state, team) => {
     state.buzzer = false;
     state.buzzedTeam = team;
+};
+
+export const updateScore = (state, {team, score}) => {
+    state.teams.find(t => t.id === team).score = score;
+    buzzerClose(state, null);
+};
+
+export const questionClose = (state) => {
+    let cat_id = state.currentQuestion.category;
+    let q_id = state.currentQuestion.id;
+    state.currentQuestion = null;
+    buzzerClose(state, null);
+
+    let category = state.board.categories.find(cat => cat.id === cat_id);
+    let question = category.questions.find(ques => ques.id === q_id);
+    console.log(cat_id, q_id, category, question);
+    if (question) {
+        question.visible = false;
+    }
 };

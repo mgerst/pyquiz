@@ -57,6 +57,15 @@ def whoami():
         teams = get_team_list(bm)
         emit('team.list', {'teams': teams})
 
+    if bm.current_question:
+        question = bm.current_question
+        emit('question.open', {
+            'clue': question.question,
+            'value': question.value,
+            'question': question.id,
+            'category': question.category,
+        })
+
 
 @socketio.on('team.join')
 def team_join(data):
@@ -173,6 +182,25 @@ def question_open(data):
         'category': category_id,
     }
     emit('question.open', ret, broadcast=True)
+
+
+@socketio.on('question.reveal')
+@admin_required
+def question_reveal():
+    question = bm.current_question.answer
+    emit('question.reveal', {'answer': question}, broadcast=True)
+
+
+@socketio.on('question.close')
+@admin_required
+def question_close():
+    question = bm.current_question
+    if question:
+        question.visible = False
+        question.persist(redis)
+
+    bm.current_question = None
+    emit('question.close', broadcast=True)
 
 
 @socketio.on('buzzer.open')

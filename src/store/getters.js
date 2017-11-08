@@ -59,3 +59,11 @@ export const buzzedTeamId = (state) => {
 export const buzzedTeam = (state) => {
     return state.teams.find(t => t.id === state.buzzedTeam);
 };
+
+export const questionRevealed = (state) => {
+    if (state.currentQuestion === null) {
+        return false;
+    }
+
+    return state.currentQuestion.answer !== null;
+};

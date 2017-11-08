@@ -32,6 +32,18 @@ export const socket_buzzerOpen = (context) => {
 };
 
 export const socket_buzzerClose = (context, {team}) => {
-    console.log("Buzzed team: ", team);
     context.commit('buzzerClose', team);
+};
+
+export const socket_teamScore = (context, data) => {
+    console.log("update team score", data);
+    context.commit('updateScore', data);
+};
+
+export const socket_questionReveal = (context, data) => {
+    context.commit('questionReveal', data);
+};
+
+export const socket_questionClose = (context) => {
+    context.commit('questionClose');
 };
