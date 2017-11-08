@@ -19,7 +19,7 @@
         },
         methods: {
             buzz() {
-
+                this.$socket.emit('team.buzz');
             }
         }
     };

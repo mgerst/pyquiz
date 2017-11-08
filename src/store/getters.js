@@ -51,3 +51,11 @@ export const isQuestionOpen = (state) => {
 export const buzzerOpen = (state) => {
     return state.buzzer;
 };
+
+export const buzzedTeamId = (state) => {
+    return state.buzzedTeam;
+};
+
+export const buzzedTeam = (state) => {
+    return state.teams.find(t => t.id === state.buzzedTeam);
+};

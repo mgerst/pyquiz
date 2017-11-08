@@ -96,6 +96,33 @@ def team_buzz():
         emit('buzzer.close', {'team': team}, broadcast=True)
 
 
+@socketio.on('team.award')
+@admin_required
+def team_award(data):
+    team_id = data['id']
+    amount = data['amount']
+
+    if not bm.team_exists(team_id):
+        emit('error', {'error': 'Invalid team', 'team': team_id})
+        return
+
+    team = bm.teams[team_id]
+    team.score += amount
+
+    if redis:
+        team.persist(redis)
+
+    emit('team.score', {'team': team_id, 'score': team.score}, broadcast=True)
+
+
+@socketio.on('team.detract')
+@admin_required
+def team_detract(data):
+    data['amount'] = -data['amount']
+    # Don't really need to repeat the logic here.
+    team_award(data)
+
+
 @socketio.on('admin.login')
 def admin_login(data):
     password = data['password']
@@ -141,6 +168,7 @@ def question_open(data):
 
     ret = {
         'clue': question.question,
+        'value': question.value,
         'question': question_id,
         'category': category_id,
     }

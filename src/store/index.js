@@ -15,6 +15,7 @@ const state = {
     board: null,
     currentQuestion: null,
     buzzer: false,
+    buzzedTeam: null,
 };
 
 const store = new Vuex.Store({

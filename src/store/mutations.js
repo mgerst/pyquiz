@@ -22,14 +22,21 @@ export const boardCurrent = (state, data) => {
     state.board = data;
 };
 
-export const questionOpen = (state, {question, category, clue}) => {
+export const questionOpen = (state, {question, category, clue, value}) => {
     state.currentQuestion = {
         id: question,
         category: category,
         clue: clue,
+        value: value,
     };
 };
 
 export const buzzerOpen = (state) => {
     state.buzzer = true;
+    state.buzzedTeam = null;
+};
+
+export const buzzerClose = (state, team) => {
+    state.buzzer = false;
+    state.buzzedTeam = team;
 };
