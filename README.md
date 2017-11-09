@@ -5,6 +5,7 @@ A python implementation of Jeopardy.
 Installation
 ============
 Install the dependencies:
+
     apt install redis-server python3-pip
     pip install -r requirements.txt
 
