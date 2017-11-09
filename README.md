@@ -17,7 +17,7 @@ Running the Dev Server
 When running the development server, you need to run both the webpack dev server ***and*** the flask dev server.
 You will need to run the following commands in one terminal:
 
-    export FLASK_APP=jeopardy.web
+    export FLASK_APP=jeopardy/web.py
     export FLASK_DEBUG=1
     flask run
 
