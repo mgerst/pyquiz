@@ -12,7 +12,7 @@
         name: 'jeopardy-team',
         props: ['team'],
         computed: {
-            ...mapGetters(['buzzedTeamId', 'openQuestion', 'isAdmin']),
+            ...mapGetters(['buzzedTeamId', 'openQuestion', 'isAdmin', 'isDailyDouble']),
             buzzed() {
                 return this.team.id === this.buzzedTeamId;
             },
@@ -22,18 +22,21 @@
         },
         methods: {
             award() {
+                let amount = this.isDailyDouble ? 1 : this.openQuestion.value;
                 if (this.buzzed && this.isAdmin) {
                     this.$socket.emit('team.award', {
                         id: this.team.id,
-                        amount: this.openQuestion.value,
+                        amount: amount,
                     });
                 }
             },
             detract() {
+                // The 1 will get inverted server-side
+                let amount = this.isDailyDouble ? 1 : this.openQuestion.value;
                 if (this.buzzed && this.isAdmin) {
                     this.$socket.emit('team.detract', {
                         id: this.team.id,
-                        amount: this.openQuestion.value,
+                        amount: amount,
                     });
                 }
             }

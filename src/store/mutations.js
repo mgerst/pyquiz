@@ -22,13 +22,15 @@ export const boardCurrent = (state, data) => {
     state.board = data;
 };
 
-export const questionOpen = (state, {question, category, clue, value}) => {
+export const questionOpen = (state, {question, category, clue, value, daily_double}) => {
     state.currentQuestion = {
         id: question,
         category: category,
         clue: clue,
         value: value,
         answer: null,
+        daily_double: daily_double,
+        wager: null,
     };
 };
 
@@ -62,5 +64,11 @@ export const questionClose = (state) => {
     console.log(cat_id, q_id, category, question);
     if (question) {
         question.visible = false;
+    }
+};
+
+export const questionWager = (state) => {
+    if (!state.admin || !state.currentQuestion.wager) {
+        state.currentQuestion.wager = true;
     }
 };

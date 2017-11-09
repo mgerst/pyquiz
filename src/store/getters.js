@@ -67,3 +67,17 @@ export const questionRevealed = (state) => {
 
     return state.currentQuestion.answer !== null;
 };
+
+export const isDailyDouble = (state) => {
+    if (state.currentQuestion === null) {
+        return false;
+    }
+    return state.currentQuestion.daily_double;
+};
+
+export const hasWager = (state) => {
+    if (state.currentQuestion === null) {
+        return false;
+    }
+    return !!state.currentQuestion.wager;
+};

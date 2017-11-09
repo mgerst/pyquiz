@@ -117,7 +117,12 @@ def team_award(data):
         return
 
     team = bm.teams[team_id]
-    team.score += amount
+    if bm.current_question.daily_double:
+        # In the daily double case, the amount will be +1 or -1
+        # as a way to handle award/detract.
+        team.score += amount * bm.current_question.wager
+    else:
+        team.score += amount
 
     if redis:
         team.persist(redis)
@@ -181,6 +186,7 @@ def question_open(data):
         'value': question.value,
         'question': question_id,
         'category': category_id,
+        'daily_double': question.daily_double,
     }
     emit('question.open', ret, broadcast=True)
 
@@ -202,6 +208,16 @@ def question_close():
 
     bm.current_question = None
     emit('question.close', broadcast=True)
+
+
+@socketio.on('question.wager')
+@admin_required
+def question_wager(data):
+    question = bm.current_question
+    question.double_team = int(data['team'])
+    question.wager = int(data['wager'])
+    emit('question.wager', broadcast=True)
+    emit('buzzer.close', {'team': question.double_team}, broadcast=True)
 
 
 @socketio.on('buzzer.open')

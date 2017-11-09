@@ -47,3 +47,11 @@ export const socket_questionReveal = (context, data) => {
 export const socket_questionClose = (context) => {
     context.commit('questionClose');
 };
+
+export const socket_questionWager = (context) => {
+    context.commit('questionWager');
+};
+
+export const socket_error = (context, data) => {
+    console.error("Got error from server:", data);
+};

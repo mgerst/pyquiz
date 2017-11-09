@@ -17,6 +17,7 @@
             </tbody>
         </table>
 
+        <jeopardy-double v-if="isQuestionOpen"></jeopardy-double>
         <jeopardy-prompt v-if="isQuestionOpen"></jeopardy-prompt>
     </div>
 </template>
@@ -24,12 +25,14 @@
 <script>
     import {mapGetters} from 'vuex';
     import JeopardyCell from './JeopardyCell.vue';
+    import JeopardyDouble from './Double.vue';
     import JeopardyPrompt from './Prompt.vue';
 
     export default {
         name: 'jeopardy-board',
         components: {
             JeopardyCell,
+            JeopardyDouble,
             JeopardyPrompt,
         },
         computed: {
