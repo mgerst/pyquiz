@@ -26,8 +26,10 @@ def run_server(boards):
     bm.load_board(boards)
     bm.init_boards()
 
+    subprocess.call(['npm', 'run', 'build'])
+
     from jeopardy.extensions import socketio
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
 
 
 @manager.command

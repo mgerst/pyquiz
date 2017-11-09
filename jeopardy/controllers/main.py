@@ -63,7 +63,7 @@ def whoami():
             'clue': question.question,
             'value': question.value,
             'question': question.id,
-            'category': question.category,
+            'category': question.category.id,
         })
 
 
