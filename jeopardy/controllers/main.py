@@ -58,6 +58,9 @@ def whoami():
         teams = get_team_list(bm)
         emit('team.list', {'teams': teams})
 
+    if session.get('admin', False) and bm.current_board:
+        send_board_current(bm)
+
     if bm.current_question:
         question = bm.current_question
         emit('question.open', {
