@@ -7,6 +7,7 @@
             <p>(or press the any key)</p>
         </div>
 
+        <h1 id="team_buzzed" v-if="buzzedTeamId">Team {{ buzzedTeamId }} buzzed in!</h1>
         <h1 id="question" v-if="questionRevealed">{{ answer }}</h1>
     </div>
 </template>
@@ -24,7 +25,7 @@
             }
         },
         computed: {
-            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed', 'isDailyDouble', 'hasWager']),
+            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed', 'isDailyDouble', 'hasWager', 'buzzedTeamId']),
             answer() {
                 if (this.openQuestion) {
                     return this.openQuestion.answer;
