@@ -3,7 +3,7 @@ export const gameState = (state) => {
 };
 
 export const loggedIn = (state) => {
-    return state.logged_in;
+    return state.logged_in || window.jeopardy.observer;
 };
 
 export const isAdmin = (state) => {

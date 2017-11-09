@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <admin-bar v-if="isAdmin"></admin-bar>
-        <team-picker v-if="!loggedIn"></team-picker>
+        <team-picker v-if="!loggedIn && !isObserver"></team-picker>
         <waiting-room v-if="loggedIn && !isAdmin"></waiting-room>
 
         <jeopardy-board v-if="gameState === 'playing' && loggedIn"></jeopardy-board>
@@ -36,6 +36,9 @@
         },
         computed: {
             ...mapGetters(['loggedIn', 'isAdmin', 'teamList', 'gameState']),
+            isObserver() {
+                return window.jeopardy.observer;
+            }
         },
     }
 </script>

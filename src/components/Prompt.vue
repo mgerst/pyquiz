@@ -2,7 +2,7 @@
     <div id="prompt">
         <h1 id="answer">{{ openQuestion.clue }}</h1>
 
-        <div id="buzzer-div" v-show="buzzerOpen && !isAdmin">
+        <div id="buzzer-div" v-show="buzzerOpen && !isAdmin && !isObserver">
             <button type="button" id="buzzer" @click="buzz" @keyup="buzz">Buzzer</button>
             <p>(or press the any key)</p>
         </div>
@@ -23,6 +23,9 @@
                     return this.openQuestion.answer;
                 }
                 return "";
+            },
+            isObserver() {
+                return window.jeopardy.observer;
             }
         },
         methods: {

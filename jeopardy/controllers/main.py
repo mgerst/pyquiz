@@ -35,7 +35,8 @@ main = MainBlueprint('main', __name__)
 @main.route('/')
 def index():
     admin = 'true' if 'admin' in request.args else 'false'
-    return render_template('app.html', admin=admin)
+    observer = 'true' if 'observer' in request.args else 'false'
+    return render_template('app.html', admin=admin, observer=observer)
 
 
 @main.route('/session/clear')
