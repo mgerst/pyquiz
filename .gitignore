@@ -99,3 +99,5 @@ node_modules/
 
 manifest.dev.json
 manifest.prod.json
+
+jeopardy/static

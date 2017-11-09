@@ -18,6 +18,8 @@
 
         {% block js %}
         {% endblock %}
+        {{ javascript_tag('manifest') | safe }}
+        {{ javascript_tag('vendor') | safe }}
         {{ javascript_tag('app') | safe }}
     </body>
 </html>

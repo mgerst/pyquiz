@@ -87,13 +87,13 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../jeopardy/static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, '../jeopardy/static'),
+    //     to: config.build.assetsSubDirectory,
+    //     ignore: ['.*']
+    //   }
+    // ]),
     new ManifestRevisionPlugin(path.join('manifest.prod.json'), {
       rootAssetPath: config.build.assetsRoot
     })
