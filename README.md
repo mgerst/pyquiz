@@ -27,3 +27,12 @@ and the following in another terminal:
 
 You can then browse the http://localhost:5000 to view the app. Any changes you make to the javascript/Vue files
 will be hot reloaded and take effect immediately.
+
+Usage
+=====
+Regular clients may simply browse to `http://the.host.ip.address:5000` and select their team. Admin users may
+browse to `http://the.host.ip.address:5000?admin` and click the admin "team" and enter the admin password. The
+only difference between the two endpoints is the admin link.
+
+Observers may browse to `http://the.host.ip.address:5000?observer`. This view will always display the current
+state of the game, but may not interact with it in any way.
