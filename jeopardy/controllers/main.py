@@ -150,6 +150,8 @@ def admin_login(data):
         session['logged_in'] = True
         session.modified = True
         send_identity()
+        if bm.current_board:
+            send_board_current(bm)
     else:
         emit('error', {'error': 'Invalid admin login'})
 
