@@ -6,9 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        {% assets "common_css" %}
-            <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" />
-        {% endassets %}
+        <link rel="stylesheet" href="/static/css/jeopardy.css" type=text/css" />
+        {{ stylesheet_tag('app') | safe }}
 
         {% block css %}
         {% endblock %}
@@ -17,11 +16,10 @@
         {% block body %}
         {% endblock %}
 
-        {% assets "common_js" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
-
         {% block js %}
         {% endblock %}
+        {{ javascript_tag('manifest') | safe }}
+        {{ javascript_tag('vendor') | safe }}
+        {{ javascript_tag('app') | safe }}
     </body>
 </html>

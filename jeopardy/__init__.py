@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 import redis
 from flask import Flask
-from webassets.loaders import PythonLoader as PythonAssetsLoader
 
-from jeopardy import assets
 from jeopardy.controllers.main import main
 
 from jeopardy.extensions import (
-    assets_env,
+    webpack,
     debug_toolbar,
+    session,
     socketio
 )
 from jeopardy.models import BoardManager
@@ -42,11 +41,8 @@ def create_app(object_name):
     debug_toolbar.init_app(app)
 
     # Import and register the different asset bundles
-    assets_env.init_app(app)
-    assets_loader = PythonAssetsLoader(assets)
-    for name, bundle in assets_loader.load_bundles().items():
-        assets_env.register(name, bundle)
-
+    webpack.init_app(app)
+    session.init_app(app)
     socketio.init_app(app)
 
     # register out blueprints

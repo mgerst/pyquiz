@@ -100,10 +100,14 @@ class Category(object):
 class Board(object):
     nextid = 1
 
-    def __init__(self, id, name):
+    TYPE_STANDARD = 'standard'
+    TYPE_FINAL = 'final'
+
+    def __init__(self, id, name, type=TYPE_STANDARD):
         self.categories = []
         self.id = id
         self.name = name
+        self.type = type
 
     def add_category(self, name):
         ct = Category(self.nextid, name)
@@ -127,14 +131,28 @@ class Board(object):
             'id': self.id,
             'name': self.name,
             'categories': [cat.as_dict() for cat in self.categories],
+            'shape': self.shape,
         }
 
     def load(self, r: StrictRedis):
         for category in self.categories:
             category.load(r)
 
+    @property
+    def shape(self):
+        width = len(self.categories)
+        height = max(len(c.items) for c in self.categories)
+        return {
+            'width': width,
+            'height': height,
+        }
+
 
 class BoardManager(object):
+    STATE_WAITING = 'waiting'
+    STATE_PLAYING = 'playing'
+    STATE_FINISHED = 'finished'
+
     def __init__(self):
         self.boards = OrderedDict()
         self.board_iter = None
@@ -145,6 +163,7 @@ class BoardManager(object):
         self.num_teams = None
         self.buzzer = None
         self._redis = None
+        self.state = BoardManager.STATE_WAITING
 
     def claim_team(self, name: str, id: int, key: str, redis: StrictRedis):
         team = Team(id, name, key)
@@ -155,8 +174,6 @@ class BoardManager(object):
             print("Persisting")
             self.persist(redis)
         print("persisted")
-
-        socketio.emit('team.taken', {'id': id, 'name': name})
 
     def team_exists(self, id):
         return id in self.teams

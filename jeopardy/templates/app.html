@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div id="app"></div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        window.jeopardy = {
+            admin: {{ admin }},
+            observer: {{ observer }},
+        };
+    </script>
+{% endblock %}

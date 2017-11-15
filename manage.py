@@ -26,8 +26,10 @@ def run_server(boards):
     bm.load_board(boards)
     bm.init_boards()
 
+    subprocess.call(['npm', 'run', 'build'])
+
     from jeopardy.extensions import socketio
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
 
 
 @manager.command
@@ -46,6 +48,8 @@ def clear_redis():
     # Redis doesn't support wildcard deletes apparently.
     # https://stackoverflow.com/questions/4006324/how-to-atomically-delete-keys-matching-a-pattern-using-redis
     r.eval("return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, "quiz:*")
+    r.eval("return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, "session:*")
+
 
 if __name__ == "__main__":
     manager.run()

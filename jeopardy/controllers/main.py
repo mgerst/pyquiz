@@ -8,6 +8,8 @@ from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager, Team
 from jeopardy.utils import team_required, admin_required
 
+from .utils import get_team_list, send_identity, send_board_current
+
 bm = None  # type: BoardManager
 redis = None  # type: StrictRedis
 
@@ -30,210 +32,202 @@ class MainBlueprint(Blueprint):
 main = MainBlueprint('main', __name__)
 
 
-@main.route('/board')
-def board():
-    if 'team' in session and session['team'] not in bm.teams:
-        session.clear()
-        return redirect('/')
-    teams = dict(bm.teams)
-
-    for i in range(1, bm.num_teams+1):
-        if i not in teams:
-            teams[i] = Team(i, None, None)
-
-    return render_template('board.html', teams=teams, admin=session.get('admin'))
-
-
 @main.route('/')
 def index():
-    teams = {}
-    for i in range(1, bm.num_teams+1):
-        if bm.team_exists(i):
-            teams[i] = bm.teams[i].name
-        else:
-            teams[i] = None
-    return render_template('index.html', teams=teams)
+    admin = 'true' if 'admin' in request.args else 'false'
+    observer = 'true' if 'observer' in request.args else 'false'
+    return render_template('app.html', admin=admin, observer=observer)
 
 
-@main.route("/session/clear")
+@main.route('/session/clear')
 def clear_session():
     session.clear()
     return redirect('/')
 
 
-@main.route('/play/<int:team>', methods=['GET', 'POST'])
-def claim_team(team):
-    if bm.num_teams < team < 0:
-        return redirect('/')
-
-    if request.method == 'GET':
-        if bm.team_exists(team):
-            return render_template('rejoin.html', team=team)
-        return render_template('login.html', team=team)
-    elif request.method == 'POST':
-        if bm.team_exists(team):
-            if 'key' in request.form and bm.validate_team(team, request.form['key']):
-                session['team'] = team
-                session['logged_in'] = True
-                session.modified = True
-                return redirect('/board')
-        else:
-            session['team'] = team
-            session['logged_in'] = True
-            session.modified = True
-            bm.claim_team(request.form['name'], team, request.form['key'], redis)
-            return redirect('/board')
-        return redirect('/play/{}'.format(team))
-
-
-@main.route('/admin', methods=['GET', 'POST'])
-def admin():
-    if request.method == 'GET':
-        return render_template('login.html', admin=True)
-    if 'password' in request.form and bm.validate_admin(request.form['password']):
-        session['admin'] = True
-        session['logged_in'] = True
-    return redirect('/board')
-
-
 @socketio.on('whoami')
 def whoami():
-    emit('you.are', {
-        'admin': session.get('admin', False),
-        'team': session.get('team', None),
-        'logged_in': session.get('logged_in', False),
+    send_identity()
+
+    emit('game.state', {
+        'state': bm.state,
     })
+
+    logged_in = session.get('logged_in', False)
+    if not logged_in:
+        teams = get_team_list(bm)
+        emit('team.list', {'teams': teams})
+
+    if session.get('admin', False) and bm.current_board:
+        send_board_current(bm)
+
+    if bm.current_question:
+        question = bm.current_question
+        emit('question.open', {
+            'clue': question.question,
+            'value': question.value,
+            'question': question.id,
+            'category': question.category.id,
+        })
+
+
+@socketio.on('team.join')
+def team_join(data):
+    team_id = data['id']
+
+    if bm.team_exists(team_id):
+        if bm.validate_team(team_id, data['password']):
+            session['team'] = team_id
+            session['logged_in'] = True
+            session.modified = True
+
+            send_identity()
+            emit('team.joined', {
+                'team': team_id,
+                'name': bm.teams[team_id].name,
+            }, broadcast=True)
+        else:
+            emit('error', {
+                'error': 'Invalid team or re-join password',
+            })
+    else:
+        session['team'] = team_id
+        session['logged_in'] = True
+        session.modified = True
+        bm.claim_team(data['name'], team_id, data['password'], redis)
+
+    if bm.state == BoardManager.STATE_PLAYING:
+        send_board_current(bm)
+
+
+@socketio.on('team.buzz')
+@team_required
+def team_buzz():
+    if not bm.buzzer:
+        bm.buzzer = True
+        team = session.get('team')
+        emit('buzzer.close', {'team': team}, broadcast=True)
+
+
+@socketio.on('team.award')
+@admin_required
+def team_award(data):
+    team_id = data['id']
+    amount = data['amount']
+
+    if not bm.team_exists(team_id):
+        emit('error', {'error': 'Invalid team', 'team': team_id})
+        return
+
+    team = bm.teams[team_id]
+    if bm.current_question.daily_double:
+        # In the daily double case, the amount will be +1 or -1
+        # as a way to handle award/detract.
+        team.score += amount * bm.current_question.wager
+    else:
+        team.score += amount
+
+    if redis:
+        team.persist(redis)
+
+    emit('team.score', {'team': team_id, 'score': team.score}, broadcast=True)
+
+
+@socketio.on('team.detract')
+@admin_required
+def team_detract(data):
+    data['amount'] = -data['amount']
+    # Don't really need to repeat the logic here.
+    team_award(data)
+
+
+@socketio.on('admin.login')
+def admin_login(data):
+    password = data['password']
+
+    if bm.validate_admin(password):
+        session['admin'] = True
+        session['logged_in'] = True
+        session.modified = True
+        send_identity()
+        if bm.current_board:
+            send_board_current(bm)
+    else:
+        emit('error', {'error': 'Invalid admin login'})
+
+
+@socketio.on('game.start')
+@admin_required
+def game_start():
+    bm.state = BoardManager.STATE_PLAYING
+    emit('game.state', {'state': bm.state}, broadcast=True)
+
+    board = bm.current
+    emit('board.switch', {
+        'id': board.id,
+        'name': board.name,
+        'type': board.type,
+    }, broadcast=True)
+    send_board_current(bm)
 
 
 @socketio.on('board.current')
-def on_board_current():
-    cur_board = bm.current
-    emit('board.current', cur_board.as_dict())
-
-
-@socketio.on('board.next')
-def on_board_next():
-    bm.next_board()
-
-
-@socketio.on('board.persist')
-@admin_required
-def persist():
-    if redis:
-        bm.persist(redis)
+def board_current():
+    send_board_current(bm)
 
 
 @socketio.on('question.open')
 @admin_required
-def on_question_open(data):
-    cat_id = int(data['category'])
-    question_id = int(data['id'])
+def question_open(data):
+    question_id = data['question']
+    category_id = data['category']
 
-    cat = bm.current.get_category(cat_id)
-    question = cat.get_question(question_id)
+    category = bm.current.get_category(category_id)
+    question = category.get_question(question_id)
     bm.current_question = question
 
-    ret = question.as_dict(True)
-    ret['daily_double'] = question.daily_double
-    ret['question'] = question.question
-    ret['category'] = question.category.id
-    question.visible = True
-
-    if 'reopen' in data and data['reopen']:
-        question.daily_double = False
-        ret['daily_double'] = False
-
-    if question.daily_double:
-        del ret['question']
-        emit('double.open', ret, broadcast=True)
-        emit('question.admin_answer', {'answer': question.answer})
-    else:
-        emit('question.open', ret, broadcast=True)
-        emit('question.admin_answer', {'answer': question.answer})
-
-
-@socketio.on('double.wager')
-@admin_required
-def on_double(data):
-    question = bm.current_question
-    question.double_team = data['team']
-    question.wager = int(data['wager'])
-
-    emit('double.start', {'team': data['team'], 'question': question.question}, broadcast=True)
-    emit('question.admin_answer', {'answer': question.answer})
-
-
-@socketio.on('correct.answer')
-@admin_required
-def show_correct_answer():
-    question = bm.current_question
-
-    ret_data = {
-        'answer': question.answer
+    ret = {
+        'clue': question.question,
+        'value': question.value,
+        'question': question_id,
+        'category': category_id,
+        'daily_double': question.daily_double,
     }
-    emit('correct.answer', ret_data, broadcast=True)
+    emit('question.open', ret, broadcast=True)
+
+
+@socketio.on('question.reveal')
+@admin_required
+def question_reveal():
+    question = bm.current_question.answer
+    emit('question.reveal', {'answer': question}, broadcast=True)
 
 
 @socketio.on('question.close')
 @admin_required
-def on_question_close(data):
-    remove = data['remove']
+def question_close():
     question = bm.current_question
-    if remove:
+    if question:
         question.visible = False
         question.persist(redis)
+
     bm.current_question = None
-
-    ret_data = {
-        'question': question.as_dict(),
-        'remove': remove,
-    }
-
-    emit('question.close', ret_data, broadcast=True)
+    emit('question.close', broadcast=True)
 
 
-@socketio.on('buzzer.clicked')
-@team_required
-def buzzer_clicked():
-    if not bm.buzzer:
-        bm.buzzer = True
-        emit('buzzer.clicked', {'team': session['team']}, broadcast=True)
+@socketio.on('question.wager')
+@admin_required
+def question_wager(data):
+    question = bm.current_question
+    question.double_team = int(data['team'])
+    question.wager = int(data['wager'])
+    emit('question.wager', broadcast=True)
+    emit('buzzer.close', {'team': question.double_team}, broadcast=True)
 
 
 @socketio.on('buzzer.open')
 @admin_required
 def buzzer_open():
     bm.buzzer = False
-    emit('buzzer.opened', {'start': int(time.time())}, broadcast=True)
+    emit('buzzer.open', broadcast=True)
 
-
-@socketio.on('buzzer.close')
-@admin_required
-def buzzer_close():
-    emit('buzzer.closed', {'end': int(time.time())}, broadcast=True)
-
-
-@socketio.on('team.award')
-@admin_required
-def team_award(data):
-    if not bm.team_exists(data['team']):
-        emit('error', {'error': "Team does not exist", 'value': data['team']})
-
-    team = bm.teams[int(data['team'])]
-    if data['correct']:
-        if bm.current_question.daily_double:
-            team.score += bm.current_question.wager
-            bm.current_question.wager = None
-        else:
-            team.score += bm.current_question.value
-    else:
-        if bm.current_question.daily_double:
-            team.score -= bm.current_question.wager
-            bm.current_question.wager = None
-        else:
-            team.score -= bm.current_question.value
-
-    if redis:
-        team.persist(redis)
-
-    emit('team.award', {'team': team.id, 'score': team.score}, broadcast=True)
