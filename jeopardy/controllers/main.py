@@ -112,15 +112,15 @@ def team_buzz():
 @socketio.on('team.award')
 @admin_required
 def team_award(data):
-    team_id = data['id']
-    amount = data['amount']
+    team_id = int(data['id'])
+    amount = int(data['amount'])
 
     if not bm.team_exists(team_id):
         emit('error', {'error': 'Invalid team', 'team': team_id})
         return
 
     team = bm.teams[team_id]
-    if bm.current_question.daily_double:
+    if bm.current_question is not None and bm.current_question.daily_double:
         # In the daily double case, the amount will be +1 or -1
         # as a way to handle award/detract.
         team.score += amount * bm.current_question.wager
