@@ -32,5 +32,5 @@ class TestConfig(Config):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     REDIS_DB = 2
     REDIS_HOST = "localhost"
-    WEBPACK_MANIFEST_PATH = '../manifest.dev.json'
+    WEBPACK_MANIFEST_PATH = '../manifest.prod.json'
 
