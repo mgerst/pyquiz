@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Question(object):
-    def __init__(self, id, value, question, answer, daily_double=False):
+    def __init__(self, id, value, question, answer, daily_double=False, type="text"):
         self.id = id
         self.value = value
         self.question = question
@@ -21,6 +21,7 @@ class Question(object):
         self.daily_double = daily_double
         self.visible = True
         self.category = None
+        self.type = type
 
         # Daily Double Stuff
         self.double_team = None
@@ -69,8 +70,8 @@ class Category(object):
         self.name = name
         self.board = None
 
-    def add_question(self, value, question, answer, dd=False):
-        bl = Question(self.nextid, value, question, answer, dd)
+    def add_question(self, value, question, answer, dd=False, type="text"):
+        bl = Question(self.nextid, value, question, answer, dd, type)
         bl.category = self
 
         self.items.append(bl)
@@ -80,9 +81,10 @@ class Category(object):
 
     def load_questions(self, questions):
         for question in questions:
-            bl = self.add_question(question['value'], question['clue'], question['answer'], question['daily_double'])
+            bl = self.add_question(question['value'], question['clue'], question['answer'], question['daily_double'],
+                                   question['type'])
 
-    def get_question(self, id : int) -> Question:
+    def get_question(self, id: int) -> Question:
         return self.items[id - 1]
 
     def as_dict(self):
@@ -123,7 +125,7 @@ class Board(object):
             ct = self.add_category(category['name'])
             ct.load_questions(category['questions'])
 
-    def get_category(self, id : int) -> Category:
+    def get_category(self, id: int) -> Category:
         return self.categories[id - 1]
 
     def as_dict(self):
@@ -190,7 +192,7 @@ class BoardManager(object):
     def load_board(self, filename):
         with open(filename, 'r') as fp:
             logger.info("Loading Jeopardy")
-            data = yaml.load(fp)
+            data = yaml.safe_load(fp)
             try:
                 self.admin_pw = data['password']
             except KeyError:
@@ -209,7 +211,7 @@ class BoardManager(object):
                 if board['order'] in self.boards:
                     raise Exception("Can't have multiple boards with the same order")
 
-                logger.debug("Loadinb categories for board %d", board['order'])
+                logger.debug("Loading categories for board %d", board['order'])
                 b.load_categories(board['categories'])
                 self.boards[board['order']] = b
 

@@ -22,7 +22,7 @@ export const boardCurrent = (state, data) => {
     state.board = data;
 };
 
-export const questionOpen = (state, {question, category, clue, value, daily_double}) => {
+export const questionOpen = (state, {question, category, clue, value, daily_double, type}) => {
     state.currentQuestion = {
         id: question,
         category: category,
@@ -31,6 +31,7 @@ export const questionOpen = (state, {question, category, clue, value, daily_doub
         answer: null,
         daily_double: daily_double,
         wager: null,
+        type: type,
     };
 };
 

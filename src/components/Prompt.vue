@@ -3,7 +3,10 @@
         <div class="clearfix">
             <h1 id="category" class="pull-left">{{ categoryName }}</h1>
         </div>
-        <h1 id="answer">{{ openQuestion.clue }}</h1>
+        <h1 id="answer" v-if="openQuestion.type === 'text'">{{ openQuestion.clue }}</h1>
+        <div id="answer" v-if="openQuestion.type === 'image'">
+            <img :src="openQuestion.clue"/>
+        </div>
 
         <div id="buzzer-div" v-show="buzzerOpen && !isAdmin && !isObserver">
             <button type="button" id="buzzer" @click="buzz" @keyup="buzz">Buzzer</button>

@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from jeopardy import create_app
+import pytest
 
 
 class TestConfig:
+    @pytest.mark.skip("The dev manifest is not generated during automated testing")
     def test_dev_config(self):
         """ Tests if the development config loads correctly """
 
