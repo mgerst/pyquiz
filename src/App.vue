@@ -186,6 +186,10 @@
         background-color: green;
     }
 
+    #correct-score {
+        background-color: goldenrod;
+    }
+
     #continue {
         background-color: cornflowerblue;
     }
@@ -228,5 +232,17 @@
 
     a {
         color: white;
+    }
+
+    .pull-right {
+        float: right;
+    }
+
+    .pull-left {
+        float: left;
+    }
+
+    .clearfix {
+        overflow: auto;
     }
 </style>
