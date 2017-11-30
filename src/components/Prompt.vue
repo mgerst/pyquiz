@@ -1,5 +1,8 @@
 <template>
     <div id="prompt" v-if="!isDailyDouble || hasWager">
+        <div class="clearfix">
+            <h1 id="category" class="pull-left">{{ categoryName }}</h1>
+        </div>
         <h1 id="answer">{{ openQuestion.clue }}</h1>
 
         <div id="buzzer-div" v-show="buzzerOpen && !isAdmin && !isObserver">
@@ -25,7 +28,7 @@
             }
         },
         computed: {
-            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed', 'isDailyDouble', 'hasWager', 'buzzedTeamId']),
+            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed', 'isDailyDouble', 'hasWager', 'buzzedTeamId', 'currentBoard']),
             answer() {
                 if (this.openQuestion) {
                     return this.openQuestion.answer;
@@ -34,7 +37,11 @@
             },
             isObserver() {
                 return window.jeopardy.observer;
-            }
+            },
+            categoryName() {
+                let category =  this.currentBoard.categories.find(cat => cat.id == this.openQuestion.category);
+                return category === null ? "" : category.name;
+            },
         },
         methods: {
             buzz() {
@@ -51,3 +58,13 @@
         }
     };
 </script>
+
+<style scoped>
+    .pull-left {
+        float: left;
+    }
+
+    .clearfix {
+        overflow: auto;
+    }
+</style>
