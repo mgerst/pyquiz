@@ -8,6 +8,12 @@ boards:
     categories:
       - name: Crypto
         questions:
+          - clue: "https://i.imgur.com/WUFGJqR.jpg"
+            answer: test
+            value: 50
+            daily_double: no
+            type: image
+
           - clue: The maximum key size for AES
             answer: 256
             value: 100
@@ -32,11 +38,11 @@ boards:
             daily_double: yes
             type: text
 
-          - clue: The Advanced Encryption Standard, established by NIST, utilizes a subset of this cipher.
-            answer: Rijndael (Not AES)
-            value: 500
-            daily_double: no
-            type: text
+#          - clue: The Advanced Encryption Standard, established by NIST, utilizes a subset of this cipher.
+#            answer: Rijndael (Not AES)
+#            value: 500
+#            daily_double: no
+#            type: text
 
       - name: Named Bugs
         questions:

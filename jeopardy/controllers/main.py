@@ -192,6 +192,7 @@ def question_open(data):
         'question': question_id,
         'category': category_id,
         'daily_double': question.daily_double,
+        'type': question.type,
     }
     emit('question.open', ret, broadcast=True)
 

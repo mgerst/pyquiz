@@ -15,7 +15,7 @@ PyYAML==3.12
 redis~=2.10
 
 # Testing
-pytest==2.9.2
-pytest-cov==2.3.1
+pytest==3.3.0
+pytest-cov==2.5.1
 mccabe==0.5.2
 flake8==2.5.4
