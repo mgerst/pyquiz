@@ -15,6 +15,7 @@ Welcome to PyQuiz's documentation!
 
    usage/installation
    usage/running
+   usage/docker
 
 Indices and tables
 ==================

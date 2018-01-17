@@ -15,6 +15,12 @@ class ProdConfig(Config):
     WEBPACK_MANIFEST_PATH = '../manifest.prod.json'
 
 
+class DockerConfig(ProdConfig):
+    REDIS_DB = 1
+    REDIS_HOST = "redis"
+    SESSION_REDIS = redis.StrictRedis(host='redis', db=2)
+
+
 class DevConfig(Config):
     ENV = 'dev'
     DEBUG = True

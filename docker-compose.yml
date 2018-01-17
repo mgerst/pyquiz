@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+
+  web:
+    build: .
+    command: python manage.py run_server --skip-npm
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis

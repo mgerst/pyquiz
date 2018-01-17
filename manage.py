@@ -21,12 +21,14 @@ manager.add_command("clean", Clean())
 
 
 @manager.option('-b', '--boards', dest='boards', default='board.yml')
-def run_server(boards):
+@manager.option('--skip-npm', dest='skip_npm', action='store_true', default=False)
+def run_server(boards, skip_npm):
     bm = app.config.get('BOARD_MANAGER')
     bm.load_board(boards)
     bm.init_boards()
 
-    subprocess.call(['npm', 'run', 'build'])
+    if not skip_npm:
+        subprocess.call(['npm', 'run', 'build'])
 
     from jeopardy.extensions import socketio
     socketio.run(app, host='0.0.0.0')
