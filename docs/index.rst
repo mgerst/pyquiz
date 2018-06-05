@@ -17,6 +17,11 @@ Welcome to PyQuiz's documentation!
    usage/running
    usage/docker
 
+.. toctree::
+   :caption: Development
+
+   dev/protocol.rst
+
 Indices and tables
 ==================
 
