@@ -8,7 +8,7 @@ from jeopardy.extensions import socketio
 from jeopardy.models import BoardManager, Team
 from jeopardy.utils import team_required, admin_required
 
-from .utils import get_team_list, send_identity, send_board_current
+from .utils import get_team_list, send_identity, send_board_current, send_team_list
 
 bm = None  # type: BoardManager
 redis = None  # type: StrictRedis
@@ -55,8 +55,7 @@ def whoami():
 
     logged_in = session.get('logged_in', False)
     if not logged_in:
-        teams = get_team_list(bm)
-        emit('team.list', {'teams': teams})
+        send_team_list(bm)
 
     if session.get('admin', False) and bm.current_board:
         send_board_current(bm)
@@ -81,6 +80,7 @@ def team_join(data):
             session['logged_in'] = True
             session.modified = True
 
+            send_team_list(bm, broadcast=True)
             send_identity()
             emit('team.joined', {
                 'team': team_id,

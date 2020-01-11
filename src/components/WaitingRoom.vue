@@ -1,5 +1,8 @@
 <template>
-    <h1>{{ message }}</h1>
+    <div class="waiting-room">
+        <h1>{{ message }}</h1>
+        <h2>Team: {{ team }}</h2>
+    </div>
 </template>
 
 <script>
@@ -8,7 +11,11 @@
     export default {
         name: 'waiting-room',
         computed: {
-            ...mapGetters(['gameState']),
+            ...mapGetters(['gameState', 'currentTeam']),
+            team() {
+                const team = this.currentTeam;
+                return team.name || team.id;
+            },
             message() {
                 if (this.gameState === "waiting") {
                     return "Waiting for game to start";
@@ -20,3 +27,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .waiting-room {
+        color: white;
+    }
+</style>

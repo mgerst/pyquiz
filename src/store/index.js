@@ -12,6 +12,7 @@ const state = {
     team: null,
     logged_in: false,
     teams: null,
+    max_teams: 0,
     board: null,
     currentQuestion: null,
     buzzer: false,

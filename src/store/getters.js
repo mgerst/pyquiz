@@ -15,7 +15,11 @@ export const teamList = (state) => {
 };
 
 export const teamCount = (state) => {
-    return state.teams.length;
+    return state.teams ? state.teams.length : 0;
+};
+
+export const maxTeams = (state) => {
+    return state.max_teams;
 };
 
 export const getTeam = (state) => {
@@ -26,6 +30,10 @@ export const getTeam = (state) => {
             return null;
         }
     }
+};
+
+export const currentTeam = (state) => {
+    return getTeam(state)(state.team);
 };
 
 export const currentBoard = (state) => {
