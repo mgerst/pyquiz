@@ -97,10 +97,10 @@
             ...mapGetters(['isAdmin', 'loggedIn', 'teamCount']),
         },
         mounted() {
-            addEventListener('keypress', this.listener);
+            addEventListener('keydown', this.listener);
         },
         destroyed() {
-            removeEventListener('keypress', this.listener);
+            removeEventListener('keydown', this.listener);
         },
     };
 </script>
