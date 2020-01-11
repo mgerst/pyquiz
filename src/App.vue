@@ -9,6 +9,8 @@
         <div id="stats">
             <jeopardy-team v-for="team in teamList" :key="team.id" :team="team"></jeopardy-team>
         </div>
+
+        <keyboard-shortcuts></keyboard-shortcuts>
     </div>
 </template>
 
@@ -19,6 +21,7 @@
     import TeamPicker from './components/TeamPicker.vue';
     import TeamScore from './components/Team.vue';
     import WaitingRoom from './components/WaitingRoom.vue';
+    import KeyboardShortcuts from './components/KeyboardShortcuts.vue';
 
     export default {
         name: 'app',
@@ -33,6 +36,7 @@
             TeamPicker,
             'jeopardy-team': TeamScore,
             WaitingRoom,
+            KeyboardShortcuts,
         },
         computed: {
             ...mapGetters(['loggedIn', 'isAdmin', 'teamList', 'gameState']),
