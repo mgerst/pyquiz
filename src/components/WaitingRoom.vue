@@ -1,7 +1,7 @@
 <template>
     <div class="waiting-room">
         <h1>{{ message }}</h1>
-        <h2>Team: {{ team }}</h2>
+        <h2 v-if="!observer">Team: {{ team }}</h2>
     </div>
 </template>
 
@@ -23,6 +23,9 @@
                     return "The game has finished";
                 }
                 return null;
+            },
+            observer() {
+                return !!window.jeopardy.observer;
             }
         }
     }
