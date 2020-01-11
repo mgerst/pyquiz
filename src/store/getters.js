@@ -14,6 +14,10 @@ export const teamList = (state) => {
     return state.teams;
 };
 
+export const teamCount = (state) => {
+    return state.teams.length;
+};
+
 export const getTeam = (state) => {
     return (id) => {
         if (state.teams !== null) {
