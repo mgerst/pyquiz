@@ -22,6 +22,8 @@
         },
         methods: {
             award() {
+                if (!this.openQuestion) { return; }
+
                 let amount = this.isDailyDouble ? 1 : this.openQuestion.value;
                 if (this.buzzed && this.isAdmin) {
                     this.$socket.emit('team.award', {
@@ -31,6 +33,8 @@
                 }
             },
             detract() {
+                if (!this.openQuestion) { return; }
+
                 // The 1 will get inverted server-side
                 let amount = this.isDailyDouble ? 1 : this.openQuestion.value;
                 if (this.buzzed && this.isAdmin) {
@@ -39,7 +43,17 @@
                         amount: amount,
                     });
                 }
-            }
+            },
+            handleKeyPress(event) {
+                if (event.shiftKey && event.code === `Digit${this.team.id}`) { this.detract(); }
+                else if (event.code === `Digit${this.team.id}`) { this.award(); }
+            },
+        },
+        mounted() {
+            addEventListener('keydown', this.handleKeyPress);
+        },
+        destroyed() {
+            removeEventListener('keydown', this.handleKeyPress);
         }
     }
 </script>

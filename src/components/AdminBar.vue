@@ -1,11 +1,17 @@
 <template>
     <div class="admin-bar clearfix">
         <button @click="startGame" v-if="isWaiting">Start</button>
-        <button v-if="isPlaying && !isQuestionOpen">Next Board</button>
-        <button v-if="isPlaying && isQuestionOpen && !buzzerOpen && !questionRevealed" id="reopen" @click="openBuzzer">Open Buzzer</button>
-        <button v-if="isPlaying && isQuestionOpen && !questionRevealed" id="correct-response" @click="reveal">Reveal</button>
-        <button v-if="isPlaying && isQuestionOpen" id="back" @click="closeQuestion">Close</button>
-        <button v-if="isPlaying && !correctingScore" id="correct-score" class="pull-right" @click="correctScore">Correct Score</button>
+        <template v-if="isPlaying">
+            <button v-if="!isQuestionOpen">Next Board</button>
+
+            <template v-if="isQuestionOpen">
+                <button v-if="!buzzerOpen && !questionRevealed" id="reopen" @click="openBuzzer">Open Buzzer</button>
+                <button v-if="!questionRevealed" id="correct-response" @click="reveal">Reveal</button>
+                <button id="back" @click="closeQuestion">Close</button>
+            </template>
+
+            <button v-if="!correctingScore" id="correct-score" class="pull-right" @click="correctScore">Correct Score</button>
+        </template>
 
         <div class="score-correction pull-right clearfix" v-if="isPlaying && correctingScore">
             <input type="number" placeholder="Team #" v-model="team_number" id="team-number" class="pull-left" />
@@ -67,8 +73,33 @@
                     this.team_number = null;
                     this.score = null;
                 }
-            }
-        }
+            },
+            handleKeyPress(event) {
+                if (this.isWaiting && event.code === 'KeyN') {
+                    this.startGame();
+                } else if (this.isPlaying) {
+                    if (this.isQuestionOpen) {
+                        if (!this.buzzerOpen && !this.questionRevealed && event.code === 'KeyB') {
+                            this.openBuzzer();
+                        } else if (!this.questionRevealed && event.code === 'KeyR') {
+                            this.reveal();
+                        } else if (event.code === 'KeyC') {
+                            this.closeQuestion();
+                        }
+                    } else if (event.code === 'KeyN') {
+                        // TODO: handle next board
+                    } else if (!this.correctingScore && event.code === 'KeyS') {
+                        this.correctScore();
+                    }
+                }
+            },
+        },
+        mounted() {
+            addEventListener('keydown', this.handleKeyPress);
+        },
+        destroyed() {
+            removeEventListener('keydown', this.handleKeyPress);
+        },
     }
 </script>
 
