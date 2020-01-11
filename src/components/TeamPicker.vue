@@ -1,6 +1,6 @@
 <template>
     <div class="team-picker">
-        <template v-if="selectedTeam === null">
+        <template v-if="!hideList">
             <h1>Team Picker</h1>
 
             <div class="player-choice" v-for="team in teamList" :key="team.id">
@@ -15,8 +15,17 @@
                 </div>
             </div>
 
+            <div class="player-choice" v-if="teamCount < maxTeams">
+                <div class="player-select" @click="selectTeam(teamCount + 1)">
+                    Create Team
+                </div>
+            </div>
+
             <div class="loading" v-if="teamList == null">
                 Loading...
+            </div>
+            <div class="team-count" v-else>
+                {{ teamCount }} of {{ maxTeams }} teams joined.
             </div>
         </template>
 
@@ -57,14 +66,17 @@
             return {
                 selectedTeam: null,
                 adminLogin: false,
+                hideList: false,
                 key: null,
                 name: null,
             }
         },
         computed: {
-            ...mapGetters(['teamList', 'getTeam']),
+            ...mapGetters(['teamList', 'getTeam', 'teamCount', 'maxTeams']),
             currentTeam() {
-                return this.getTeam(this.selectedTeam);
+                if (this.selectedTeam === null) { return; }
+
+                return this.getTeam(this.selectedTeam) || { id: this.selectedTeam, name: '', taken: false };
             },
             showAdmin() {
                 return window.jeopardy.admin;
@@ -73,6 +85,7 @@
         methods: {
             selectTeam(id) {
                 this.selectedTeam = id;
+                this.hideList = true;
             },
             join() {
                 this.$socket.emit('team.join', {
@@ -94,7 +107,7 @@
             },
             loginAdmin() {
                 this.adminLogin = true;
-                this.selectedTeam = true;
+                this.hideList = true;
             },
         }
     }

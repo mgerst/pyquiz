@@ -15,13 +15,6 @@ def get_team_list(bm: BoardManager):
                 'taken': True,
                 'score': 0,
             })
-        else:
-            teams.append({
-                'id': i,
-                'name': None,
-                'taken': False,
-                'score': 0,
-            })
     return teams
 
 
@@ -31,6 +24,11 @@ def send_identity():
         'team': session.get('team', None),
         'logged_in': session.get('logged_in', False),
     })
+
+
+def send_team_list(bm: BoardManager, broadcast: bool = False):
+    teams = get_team_list(bm)
+    emit('team.list', {'teams': teams, 'max_teams': bm.num_teams}, broadcast=broadcast)
 
 
 def send_board_current(bm: BoardManager):

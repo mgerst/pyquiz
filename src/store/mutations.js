@@ -8,12 +8,13 @@ export const setState = (state, gameState) => {
     state.state = gameState;
 };
 
-export const setTeams = (state, teams) => {
+export const setTeams = (state, {teams, max_teams}) => {
     state.teams = teams;
+    state.max_teams = max_teams;
 };
 
 export const teamJoin = (state, {team, name}) => {
-    let found_team = state.teams.find(t => team === t.id)
+    let found_team = state.teams.find(t => team === t.id);
     found_team.taken = true;
     found_team.name = name;
 };

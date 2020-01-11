@@ -6,8 +6,8 @@ export const socket_gameState = (context, {state}) => {
     context.commit('setState', state);
 };
 
-export const socket_teamList = (context, {teams}) => {
-    context.commit('setTeams', teams);
+export const socket_teamList = (context, {teams, max_teams}) => {
+    context.commit('setTeams', { teams, max_teams });
 };
 
 export const socket_teamJoined = (context, data) => {
