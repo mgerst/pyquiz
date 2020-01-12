@@ -1,7 +1,7 @@
 <template>
     <div id="prompt" v-if="!isDailyDouble || hasWager">
         <div class="clearfix">
-            <h1 id="category" class="pull-left">{{ categoryName }}</h1>
+            <h1 id="category" class="pull-left">{{ categoryName }} ({{ value }})</h1>
         </div>
         <h1 id="answer" v-if="openQuestion.type === 'text'">{{ openQuestion.clue }}</h1>
         <div id="answer" v-if="openQuestion.type === 'image'">
@@ -37,6 +37,9 @@
                     return this.openQuestion.answer;
                 }
                 return "";
+            },
+            value() {
+                return this.openQuestion ? this.openQuestion.value : "";
             },
             isObserver() {
                 return window.jeopardy.observer;
