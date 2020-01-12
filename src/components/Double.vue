@@ -15,27 +15,30 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
 
-    export default {
+    @Component({
         name: 'jeopardy-double',
-        data() {
-            return {
-                team_number: null,
-                wager: null,
-            }
-        },
-        computed: {
-            ...mapGetters(['isAdmin', 'isDailyDouble', 'hasWager', 'teamList']),
-        },
-        methods: {
-            makeWager() {
-                this.$socket.emit('question.wager', {
-                    team: this.team_number,
-                    wager: this.wager,
-                });
-            }
+    })
+    export default class extends Vue {
+        team_number : number | null = null;
+        wager : number | null = null;
+
+        @Getter isAdmin;
+        @Getter isDailyDouble;
+        @Getter hasWager;
+        @Getter teamList;
+
+        makeWager() {
+            this.$socket.client.emit('question.wager', {
+                team: this.team_number,
+                wager: this.wager,
+            });
         }
     };
 </script>

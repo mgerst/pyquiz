@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as getters from './getters';
-import * as actions from './actions';
-import * as mutations from './mutations'
+import { RootState, State } from './types';
+import { getters } from './getters';
+import { actions } from './actions';
+import { mutations } from './mutations'
 
 Vue.use(Vuex);
 
-const state = {
-    state: 'unknown',
+const state : RootState = {
+    state: State.Unknown,
     admin: false,
     team: null,
     logged_in: false,
-    teams: null,
+    teams: [],
     max_teams: 0,
     board: null,
     currentQuestion: null,
@@ -19,7 +20,7 @@ const state = {
     buzzedTeam: null,
 };
 
-const store = new Vuex.Store({
+const store = new Vuex.Store<RootState>({
     state,
     actions,
     getters,

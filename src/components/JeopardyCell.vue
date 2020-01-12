@@ -4,35 +4,41 @@
     </td>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import { Component, Prop } from 'vue-property-decorator';
+    import {
+        Getter,
+    } from 'vuex-class';
+    import { Question } from '../store/types';
 
-    export default {
+    @Component({
         name: 'jeopardy-cell',
-        props: ['category', 'question'],
-        computed: {
-            ...mapGetters(['getQuestion', 'isAdmin']),
-            current() {
-                return this.getQuestion(this.category, this.question);
-            },
-            value() {
-                if (this.current !== null) {
-                    return this.current.value;
-                }
-                return null;
-            },
-        },
-        methods: {
-            open() {
-                if (this.isAdmin) {
-                    this.$socket.emit('question.open', {
-                        question: this.question,
-                        category: this.category,
-                    })
-                } else {
-                    console.log("Can't open question as non-admin");
-                }
+    })
+    export default class extends Vue {
+        @Prop({ type: Number }) readonly category! : number;
+        @Prop({ type: Number }) readonly question! : number;
+
+        @Getter getQuestion;
+        @Getter isAdmin;
+
+        get current() : Question | null {
+            return this.getQuestion(this.category, this.question);
+        }
+
+        get value() : number | null {
+            return this.current !== null ? this.current.value : null;
+        }
+
+        open() {
+            if (this.isAdmin) {
+                this.$socket.client.emit('question.open', {
+                    question: this.question,
+                    category: this.category,
+                })
+            } else {
+                console.log("Can't open question as non-admin");
             }
         }
-    }
+    };
 </script>

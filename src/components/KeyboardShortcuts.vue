@@ -80,28 +80,35 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
     import { mapGetters } from 'vuex';
 
-    export default {
+    @Component({
         name: 'keyboard-shortcuts',
-        data() {
-            return {
-                open: false,
-                listener: (event) => {
-                    if (event.shiftKey && event.code === 'Slash') { this.open = !this.open; }
-                },
-            };
-        },
-        computed: {
-            ...mapGetters(['isAdmin', 'loggedIn', 'teamCount']),
-        },
+    })
+    export default class extends Vue {
+        open : boolean = false;
+
+        @Getter isAdmin;
+        @Getter loggedIn;
+        @Getter teamCount;
+
+        handleKeyDown(event) {
+            if (event.shiftKey && event.code === 'Slash') { this.open = !this.open; }
+        }
+
         mounted() {
-            addEventListener('keydown', this.listener);
-        },
+            addEventListener('keydown', this.handleKeyDown);
+        }
+
         destroyed() {
-            removeEventListener('keydown', this.listener);
-        },
+            removeEventListener('keydown', this.handleKeyDown);
+        }
     };
 </script>
 
