@@ -184,7 +184,7 @@
         background-color: cornflowerblue;
     }
 
-    #buzzer, #reopen {
+    #buzzer, #reopen, #close-buzzer {
         background-color: red;
     }
 

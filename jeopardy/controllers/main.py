@@ -109,6 +109,12 @@ def team_buzz():
         emit('buzzer.close', {'team': team}, broadcast=True)
 
 
+@socketio.on('buzzer.close')
+@admin_required
+def buzzer_close():
+    emit('buzzer.close', {'team': None}, broadcast=True)
+
+
 @socketio.on('team.award')
 @admin_required
 def team_award(data):

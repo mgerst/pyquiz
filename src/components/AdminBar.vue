@@ -6,6 +6,7 @@
 
             <template v-if="isQuestionOpen">
                 <button v-if="!buzzerOpen && !questionRevealed" id="reopen" @click="openBuzzer">Open Buzzer</button>
+                <button v-if="buzzerOpen && !questionRevealed" id="close-buzzer" @click="closeBuzzer">Close Buzzer</button>
                 <button v-if="!questionRevealed" id="correct-response" @click="reveal">Reveal</button>
                 <button id="back" @click="closeQuestion">Close</button>
             </template>
@@ -62,6 +63,10 @@
             this.$socket.client.emit('buzzer.open');
         }
 
+        closeBuzzer() {
+            this.$socket.client.emit('buzzer.close');
+        }
+
         reveal() {
             this.$socket.client.emit('question.reveal');
         }
@@ -93,8 +98,12 @@
                 this.startGame();
             } else if (this.isPlaying) {
                 if (this.isQuestionOpen) {
-                    if (!this.buzzerOpen && !this.questionRevealed && event.code === 'KeyB') {
-                        this.openBuzzer();
+                    if (!this.questionRevealed && event.code === 'KeyB') {
+                        if (this.buzzerOpen) {
+                            this.closeBuzzer();
+                        } else {
+                            this.openBuzzer();
+                        }
                     } else if (!this.questionRevealed && event.code === 'KeyR') {
                         this.reveal();
                     } else if (event.code === 'KeyC') {
