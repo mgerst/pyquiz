@@ -19,6 +19,6 @@ cache:
 
 install:
  - pip install -r requirements.txt
- - npm install
- - npm run build
+ - yarn install
+ - yarn run build
 script: py.test tests
