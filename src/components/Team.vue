@@ -11,12 +11,13 @@
     import {
         Getter,
     } from 'vuex-class';
+    import { Team } from '../store/types';
 
     @Component({
         name: 'jeopardy-team',
     })
     export default class extends Vue {
-        @Prop(Object) team! : any;
+        @Prop() team! : Team;
 
         @Getter buzzedTeamId;
         @Getter openQuestion;

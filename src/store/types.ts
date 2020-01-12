@@ -51,6 +51,7 @@ export interface Board {
 
 export enum State {
     Unknown = 'unknown',
+    Waiting = 'waiting',
     Playing = 'playing',
     Finished = 'finished',
 }

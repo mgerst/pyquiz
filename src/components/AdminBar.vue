@@ -27,6 +27,7 @@
     import {
         Getter,
     } from 'vuex-class';
+    import { State } from '../store/types';
 
     @Component({
         name: 'admin-bar',
@@ -42,15 +43,15 @@
         @Getter questionRevealed;
 
         get isWaiting() : boolean {
-            return this.gameState === 'waiting';
+            return this.gameState === State.Waiting;
         }
 
         get isPlaying() : boolean {
-            return this.gameState === 'playing';
+            return this.gameState === State.Playing;
         }
 
         get isFinished() : boolean {
-            return this.gameState === 'finished';
+            return this.gameState === State.Finished;
         }
 
         startGame() {

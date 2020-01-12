@@ -10,6 +10,7 @@
     import {
         Getter,
     } from 'vuex-class';
+    import { Question } from '../store/types';
 
     @Component({
         name: 'jeopardy-cell',
@@ -21,7 +22,7 @@
         @Getter getQuestion;
         @Getter isAdmin;
 
-        get current() : any | null {
+        get current() : Question | null {
             return this.getQuestion(this.category, this.question);
         }
 

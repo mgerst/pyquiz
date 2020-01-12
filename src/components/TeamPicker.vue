@@ -63,7 +63,7 @@
     import {
         Getter,
     } from 'vuex-class';
-    import {mapGetters} from 'vuex';
+    import { Team } from '../store/types';
 
     @Component({
         name: 'team-picker',
@@ -80,8 +80,8 @@
         @Getter teamCount;
         @Getter maxTeams;
 
-        get currentTeam() : any | null {
-            if (this.selectedTeam === null) { return; }
+        get currentTeam() : Team | null {
+            if (this.selectedTeam === null) { return null; }
 
             return this.getTeam(this.selectedTeam) || { id: this.selectedTeam, name: '', taken: false };
         }
