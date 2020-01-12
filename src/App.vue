@@ -14,8 +14,12 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from "vue-class-component";
+    import {
+        Getter,
+    } from 'vuex-class';
     import AdminBar from './components/AdminBar.vue';
     import Board from './components/Board.vue';
     import TeamPicker from './components/TeamPicker.vue';
@@ -23,11 +27,7 @@
     import WaitingRoom from './components/WaitingRoom.vue';
     import KeyboardShortcuts from './components/KeyboardShortcuts.vue';
 
-    export default {
-        name: 'app',
-        data() {
-            return {}
-        },
+    @Component({
         components: {
             AdminBar,
             'jeopardy-board': Board,
@@ -35,13 +35,17 @@
             'jeopardy-team': TeamScore,
             WaitingRoom,
             KeyboardShortcuts,
-        },
-        computed: {
-            ...mapGetters(['loggedIn', 'isAdmin', 'teamList', 'gameState']),
-            isObserver() {
-                return window.jeopardy.observer;
-            }
-        },
+        }
+    })
+    export default class App extends Vue {
+        @Getter loggedIn;
+        @Getter isAdmin;
+        @Getter teamList;
+        @Getter gameState;
+
+        get isObserver() {
+            return window.jeopardy.observer;
+        }
     };
 </script>
 

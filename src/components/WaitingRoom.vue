@@ -5,30 +5,38 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
 
-    export default {
+    @Component({
         name: 'waiting-room',
-        computed: {
-            ...mapGetters(['gameState', 'currentTeam']),
-            team() {
-                const team = this.currentTeam;
-                return team.name || team.id;
-            },
-            message() {
-                if (this.gameState === "waiting") {
-                    return "Waiting for game to start";
-                } else if (this.gameState === "finished") {
-                    return "The game has finished";
-                }
-                return null;
-            },
-            observer() {
-                return !!window.jeopardy.observer;
-            }
+    })
+    export default class extends Vue {
+        @Getter gameState;
+        @Getter currentTeam;
+
+        get team() : string | number {
+            const team = this.currentTeam;
+            return team.name || team.id;
         }
-    }
+
+        get message() : string | null {
+            if (this.gameState === "waiting") {
+                return "Waiting for game to start";
+            } else if (this.gameState === "finished") {
+                return "The game has finished";
+            }
+            return null;
+        }
+
+        get observer() : boolean {
+            return !!window.jeopardy.observer;
+        }
+    };
 </script>
 
 <style scoped>

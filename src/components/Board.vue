@@ -22,45 +22,42 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
     import JeopardyCell from './JeopardyCell.vue';
     import JeopardyDouble from './Double.vue';
     import JeopardyPrompt from './Prompt.vue';
 
-    export default {
+    @Component({
         name: 'jeopardy-board',
         components: {
             JeopardyCell,
             JeopardyDouble,
             JeopardyPrompt,
-        },
-        computed: {
-            ...mapGetters(['currentBoard', 'isQuestionOpen']),
-            name() {
-                if (this.currentBoard) {
-                    return this.currentBoard.name;
-                }
-                return "Loading...";
-            },
-            categories() {
-                if (this.currentBoard) {
-                    return this.currentBoard.categories;
-                }
-                return [];
-            },
-            height() {
-                if (this.currentBoard) {
-                    return this.currentBoard.shape.height;
-                }
-                return 0;
-            },
-            width() {
-                if (this.currentBoard) {
-                    return this.currentBoard.shape.width;
-                }
-                return 0;
-            }
         }
-    }
+    })
+    export default class extends Vue {
+        @Getter currentBoard;
+        @Getter isQuestionOpen;
+
+        get name() : string {
+            return this.currentBoard ? this.currentBoard.name : 'Loading...';
+        }
+
+        get categories() : Array<Object> {
+            return this.currentBoard ? this.currentBoard.categories : [];
+        }
+
+        get height() : number {
+            return this.currentBoard ? this.currentBoard.shape.height : 0;
+        }
+
+        get width() : number {
+            return this.currentBoard ? this.currentBoard.shape.width : 0;
+        }
+    };
 </script>

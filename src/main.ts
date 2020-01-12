@@ -10,10 +10,6 @@ const socket = io(`${location.protocol}//${document.domain}:${location.port}`);
 Vue.use(VueSocketIOExt, socket, {
     store,
     actionPrefix: 'socket_',
-    eventToActionTransformer(name) {
-        console.debug('action transform', name);
-        return VueSocketIOExt.defaults.eventToActionTransformer(name);
-    },
 });
 // Vue.use(VueSocketIOExt, socket);
 
@@ -32,3 +28,9 @@ new Vue({
         },
     },
 });
+
+declare global {
+    interface Window { jeopardy: any; }
+}
+
+window.jeopardy = window.jeopardy || { observer: false };

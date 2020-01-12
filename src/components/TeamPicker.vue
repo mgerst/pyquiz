@@ -57,60 +57,70 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
     import {mapGetters} from 'vuex';
 
-    export default {
-        name: "team-picker",
-        data() {
-            return {
-                selectedTeam: null,
-                adminLogin: false,
-                hideList: false,
-                key: null,
-                name: null,
-            }
-        },
-        computed: {
-            ...mapGetters(['teamList', 'getTeam', 'teamCount', 'maxTeams']),
-            currentTeam() {
-                if (this.selectedTeam === null) { return; }
+    @Component({
+        name: 'team-picker',
+    })
+    export default class extends Vue {
+        selectedTeam : number | null = null;
+        adminLogin : boolean = false;
+        hideList : boolean = false;
+        key : string | null = null;
+        name : string | null = null;
 
-                return this.getTeam(this.selectedTeam) || { id: this.selectedTeam, name: '', taken: false };
-            },
-            showAdmin() {
-                return window.jeopardy.admin;
-            },
-        },
-        methods: {
-            selectTeam(id) {
-                this.selectedTeam = id;
-                this.hideList = true;
-            },
-            join() {
-                this.$socket.client.emit('team.join', {
-                    id: this.selectedTeam,
-                    password: this.key,
-                    name: this.name,
-                });
-            },
-            rejoin() {
-                this.$socket.client.emit('team.join', {
-                    id: this.selectedTeam,
-                    password: this.key,
-                });
-            },
-            adminJoin() {
-                this.$socket.client.emit('admin.login', {
-                    password: this.key,
-                });
-            },
-            loginAdmin() {
-                this.adminLogin = true;
-                this.hideList = true;
-            },
+        @Getter teamList;
+        @Getter getTeam;
+        @Getter teamCount;
+        @Getter maxTeams;
+
+        get currentTeam() : any | null {
+            if (this.selectedTeam === null) { return; }
+
+            return this.getTeam(this.selectedTeam) || { id: this.selectedTeam, name: '', taken: false };
         }
-    }
+
+        get showAdmin() : boolean {
+            return window.jeopardy.admin;
+        };
+
+        selectTeam(id : number) {
+            this.selectedTeam = id;
+            this.hideList = true;
+        }
+
+        join() {
+            this.$socket.client.emit('team.join', {
+                id: this.selectedTeam,
+                password: this.key,
+                name: this.name,
+            });
+        }
+
+        rejoin() {
+            this.$socket.client.emit('team.join', {
+                id: this.selectedTeam,
+                password: this.key,
+            });
+        }
+
+        adminJoin() {
+            this.$socket.client.emit('admin.login', {
+                password: this.key,
+            });
+        }
+
+        loginAdmin() {
+            this.adminLogin = true;
+            this.hideList = true;
+        }
+    };
 </script>
 
 <style>

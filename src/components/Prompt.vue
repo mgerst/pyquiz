@@ -18,49 +18,58 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import {
+        Getter,
+    } from 'vuex-class';
     import {mapGetters} from 'vuex';
 
-    export default {
+    @Component({
         name: 'jeopardy-prompt',
-        data() {
-            return {
-                listener: () => {
-                    this.buzz();
-                }
-            }
-        },
-        computed: {
-            ...mapGetters(['openQuestion', 'buzzerOpen', 'isAdmin', 'questionRevealed', 'isDailyDouble', 'hasWager', 'buzzedTeamId', 'currentBoard']),
-            answer() {
-                if (this.openQuestion) {
-                    return this.openQuestion.answer;
-                }
-                return "";
-            },
-            value() {
-                return this.openQuestion ? this.openQuestion.value : "";
-            },
-            isObserver() {
-                return window.jeopardy.observer;
-            },
-            categoryName() {
-                let category =  this.currentBoard.categories.find(cat => cat.id == this.openQuestion.category);
-                return category === null ? "" : category.name;
-            },
-        },
-        methods: {
-            buzz() {
-                if (this.buzzerOpen) {
-                    this.$socket.client.emit('team.buzz');
-                }
-            },
-        },
-        mounted() {
-            addEventListener('keypress', this.listener);
-        },
-        destroyed() {
-            removeEventListener('keypress', this.listener);
+    })
+    export default class extends Vue {
+        @Getter openQuestion;
+        @Getter buzzerOpen;
+        @Getter isAdmin;
+        @Getter questionRevealed;
+        @Getter isDailyDouble;
+        @Getter hasWager;
+        @Getter buzzedTeamId;
+        @Getter currentBoard;
+
+        get answer() : string {
+            return this.openQuestion ? this.openQuestion.answer : "";
+        }
+
+        get value() : string {
+            return this.openQuestion ? this.openQuestion.value : "";
+        }
+
+        get isObserver() : boolean {
+            return window.jeopardy.observer;
+        }
+
+        get categoryName() : string {
+            const category = this.currentBoard.categories.find(cat => cat.id == this.openQuestion.category);
+            return category === null ? "" : category.name;
+        }
+
+        buzz() {
+            if (this.buzzerOpen) { this.$socket.client.emit('team.buzz'); }
+        }
+
+        handleKeyDown() {
+            this.buzz();
+        }
+
+        mounted() : void {
+            addEventListener('keydown', this.handleKeyDown);
+        }
+
+        destroyed() : void {
+            removeEventListener('keydown', this.handleKeyDown);
         }
     };
 </script>
