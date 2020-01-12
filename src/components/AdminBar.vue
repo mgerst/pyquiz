@@ -47,16 +47,16 @@
         },
         methods: {
             startGame() {
-                this.$socket.emit('game.start');
+                this.$socket.client.emit('game.start');
             },
             openBuzzer() {
-                this.$socket.emit('buzzer.open');
+                this.$socket.client.emit('buzzer.open');
             },
             reveal() {
-                this.$socket.emit('question.reveal');
+                this.$socket.client.emit('question.reveal');
             },
             closeQuestion() {
-                this.$socket.emit('question.close');
+                this.$socket.client.emit('question.close');
             },
             correctScore() {
                 this.correctingScore = true;
@@ -65,7 +65,7 @@
                 this.correctingScore = false;
 
                 if (this.team_number !== null && this.score !== null) {
-                    this.$socket.emit('team.award', {
+                    this.$socket.client.emit('team.award', {
                         id: this.team_number,
                         amount: this.score,
                     });

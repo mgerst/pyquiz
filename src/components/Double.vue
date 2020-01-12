@@ -31,7 +31,7 @@
         },
         methods: {
             makeWager() {
-                this.$socket.emit('question.wager', {
+                this.$socket.client.emit('question.wager', {
                     team: this.team_number,
                     wager: this.wager,
                 });

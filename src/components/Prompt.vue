@@ -52,7 +52,7 @@
         methods: {
             buzz() {
                 if (this.buzzerOpen) {
-                    this.$socket.emit('team.buzz');
+                    this.$socket.client.emit('team.buzz');
                 }
             },
         },

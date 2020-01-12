@@ -88,20 +88,20 @@
                 this.hideList = true;
             },
             join() {
-                this.$socket.emit('team.join', {
+                this.$socket.client.emit('team.join', {
                     id: this.selectedTeam,
                     password: this.key,
                     name: this.name,
                 });
             },
             rejoin() {
-                this.$socket.emit('team.join', {
+                this.$socket.client.emit('team.join', {
                     id: this.selectedTeam,
                     password: this.key,
                 });
             },
             adminJoin() {
-                this.$socket.emit('admin.login', {
+                this.$socket.client.emit('admin.login', {
                     password: this.key,
                 });
             },

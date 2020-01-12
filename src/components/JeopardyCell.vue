@@ -25,7 +25,7 @@
         methods: {
             open() {
                 if (this.isAdmin) {
-                    this.$socket.emit('question.open', {
+                    this.$socket.client.emit('question.open', {
                         question: this.question,
                         category: this.category,
                     })

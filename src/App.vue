@@ -28,8 +28,6 @@
         data() {
             return {}
         },
-        methods: {
-        },
         components: {
             AdminBar,
             'jeopardy-board': Board,
@@ -44,7 +42,7 @@
                 return window.jeopardy.observer;
             }
         },
-    }
+    };
 </script>
 
 <style>
