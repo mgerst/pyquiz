@@ -41,7 +41,7 @@ export const mutations : MutationTree<RootState> = {
         state.buzzer = true;
         state.buzzedTeam = null;
     },
-    buzzerClose(state, team : number) {
+    buzzerClose(state, team : number | null) {
         state.buzzer = false;
         state.buzzedTeam = team;
     },
