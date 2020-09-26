@@ -5,7 +5,7 @@ python:
   - "3.7"
 
 env:
-  - NODE_VERSION="12.24"
+  - NODE_VERSION="v12.18"
 
 matrix:
   fast_finish: true
