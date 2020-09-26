@@ -3,8 +3,9 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
-node_js:
-  - 10
+
+env:
+  - NODE_VERSION="12.24"
 
 matrix:
   fast_finish: true
@@ -18,6 +19,10 @@ cache:
   pip: true
   directories:
     - node_modules # NPM Packages
+
+before_install:
+  - nvm install $NODE_VERSION
+  - node --version
 
 install:
  - pip install -r requirements.txt
