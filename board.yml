@@ -38,12 +38,6 @@ boards:
             daily_double: yes
             type: text
 
-#          - clue: The Advanced Encryption Standard, established by NIST, utilizes a subset of this cipher.
-#            answer: Rijndael (Not AES)
-#            value: 500
-#            daily_double: no
-#            type: text
-
       - name: Named Bugs
         questions:
           - clue: This 2016 privilege escalation vulnerability affected the copy-on-write handling of the Linux kernel
@@ -203,3 +197,14 @@ boards:
             value: 500
             daily_double: no
             type: text
+
+  - order: 2
+    name: Second Round
+    categories:
+      - name: Cat A
+        questions:
+          - clue: "https://i.imgur.com/WUFGJqR.jpg"
+            answer: test
+            value: 100
+            daily_double: no
+            type: image

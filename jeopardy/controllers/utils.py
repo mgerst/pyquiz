@@ -1,7 +1,7 @@
 from flask import session
 from flask_socketio import emit
 
-from ..models import BoardManager
+from ..models import BoardManager, Board
 
 
 def get_team_list(bm: BoardManager):
@@ -33,3 +33,11 @@ def send_team_list(bm: BoardManager, broadcast: bool = False):
 
 def send_board_current(bm: BoardManager):
     emit('board.current', bm.current.as_dict(), broadcast=True)
+
+
+def send_board_switch(board: Board):
+    emit('board.switch', {
+        'id': board.id,
+        'name': board.name,
+        'type': board.type,
+    }, broadcast=True)

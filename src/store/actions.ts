@@ -20,6 +20,7 @@ export const actions : ActionTree<any, RootState> = {
     },
     socket_boardCurrent({ commit }, data) {
         commit('boardCurrent', data);
+        console.log('Current board', data);
     },
     socket_questionOpen({ commit }, data) {
         commit('questionOpen', data);

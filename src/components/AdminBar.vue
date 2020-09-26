@@ -2,7 +2,7 @@
     <div class="admin-bar clearfix">
         <button @click="startGame" v-if="isWaiting">Start</button>
         <template v-if="isPlaying">
-            <button v-if="!isQuestionOpen">Next Board</button>
+            <button v-if="!isQuestionOpen" @click="nextBoard">Next Board</button>
 
             <template v-if="isQuestionOpen">
                 <button v-if="!buzzerOpen && !questionRevealed" id="reopen" @click="openBuzzer">Open Buzzer</button>
@@ -73,6 +73,10 @@
 
         closeQuestion() {
             this.$socket.client.emit('question.close');
+        }
+
+        nextBoard() {
+            this.$socket.client.emit('board.next');
         }
 
         correctScore() {
