@@ -21,6 +21,7 @@ cache:
     - node_modules # NPM Packages
 
 before_install:
+  - nvm ls-remote
   - nvm install $NODE_VERSION
   - node --version
 
